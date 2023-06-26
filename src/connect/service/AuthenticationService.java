@@ -38,6 +38,9 @@ public class AuthenticationService {
             e.printStackTrace();
         }
 
+//        user.getProfile().setAvatar(new Image("D:\\AP\\midterm-project\\7\\src\\client\\resources\\pic\\profile.png"));
+//        user.getProfile().setHeader(new Image("D:\\AP\\midterm-project\\7\\src\\client\\resources\\pic\\header.blue2.png"));
+//        user.getProfile().setLocation(request.getCountry());
         try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME() , true))) {
             out.writeObject(user);
         } catch (IOException e) {

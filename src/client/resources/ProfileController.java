@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -142,9 +143,19 @@ public class ProfileController extends Controller implements Initializable {
             date += " " + response.getDate().toString().split(" ")[1];
             dateLabel.setText(date);
 
-            headerImageview.setImage(response.getProfile().getHeader());
-            profileImageview.setImage(response.getProfile().getAvatar());
+            if (response.getProfile().getAvatar() == null){
+                headerImageview.setImage(new Image("src/client/resources/pic/header.blue2.png"));
+            }
+            else {
+                headerImageview.setImage(response.getProfile().getHeader());
+            }
+            if (response.getProfile().getAvatar() == null){
+                profileImageview.setImage(new Image("src/client/resources/pic/profile.png"));
+            }
+            else {
+                profileImageview.setImage(response.getProfile().getAvatar());
 
+            }
         } catch(ResponseNotFoundException e) {
             //closeScene();
         }

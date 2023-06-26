@@ -10,7 +10,7 @@
    <children>
       <ImageView fx:id="headerImageview" fitHeight="120.0" fitWidth="500.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@header.blue2.png" />
+            <Image url="@../pic/header.blue2.png" />
          </image>
       </ImageView>
       <GridPane hgap="8.0" layoutY="549.0" prefWidth="500.0">
@@ -51,7 +51,7 @@
       </GridPane>
       <ImageView fx:id="profileImageview" cache="true" fitHeight="106.0" fitWidth="118.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@profile.png" />
+            <Image url="@../pic/profile.png" />
          </image>
       </ImageView>
       <Label fx:id="nameLabel" layoutX="21.0" layoutY="177.0" prefHeight="23.0" prefWidth="164.0" text="Name">

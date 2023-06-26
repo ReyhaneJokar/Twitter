@@ -1,8 +1,8 @@
 package client.resources.cell;
 
-import javafx.scene.control.ListCell;
-import model.tweet.Tweet;
+import javafx.scene.layout.AnchorPane;
 
-public class TweetCell extends ListCell<Tweet> {
+public class TweetCell extends AnchorPane {
+
 
 }
