@@ -1,5 +1,6 @@
 package client.resources.cell;
 
+import client.ClientThread;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -11,9 +12,16 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import model.Response;
+import model.exception.ResponseNotFoundException;
+import model.exception.UserNotFoundException;
+import model.request.user.UnFollowReq;
 import model.user.User;
 
 public class FollowingCell extends AnchorPane {
+
+    protected final ClientThread clientThread = ClientThread.getClientThread();
+
     private User user;
     private Circle profileCircle;
     private Label nameLabel;
@@ -70,7 +78,24 @@ public class FollowingCell extends AnchorPane {
         unfollowButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                //go and follow user
+                //unfollow user
+                clientThread.send(new UnFollowReq(clientThread.getId(), idLabel.getText()));
+                try {
+                    Response response = clientThread.getReceiver().getResponse();
+
+                    if(response.isAccepted()) {
+
+                        unfollowButton.setText("unfollowed");
+                        unfollowButton.setTextFill(Paint.valueOf("white"));
+                        unfollowButton.setStyle("-fx-background-color:#0da5f3;");
+                    }
+                    else{
+                        throw new UserNotFoundException();
+                    }
+
+                } catch (ResponseNotFoundException | UserNotFoundException e) {
+                    e.printStackTrace();
+                }
             }
         });
     }

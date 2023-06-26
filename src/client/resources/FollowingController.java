@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import model.exception.ResponseNotFoundException;
 import model.request.user.FollowingListReq;
@@ -17,6 +19,10 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class FollowingController extends Controller implements Initializable {
+
+    @FXML
+    private ImageView backImageview;
+
     @FXML
     private Button followersButton;
 
@@ -30,6 +36,10 @@ public class FollowingController extends Controller implements Initializable {
         changeView("follower", event);
     }
 
+    @FXML
+    void backImageviewPressed(MouseEvent event) {
+        changeView("profile", event);
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,7 +51,6 @@ public class FollowingController extends Controller implements Initializable {
         //get followers from server
         ArrayList<User> following = new ArrayList<>();
 
-        //get followers from server
         try {
             clientThread.send(new FollowingListReq(clientThread.getId()));
 

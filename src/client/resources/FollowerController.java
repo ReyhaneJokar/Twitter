@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import model.exception.ResponseNotFoundException;
 import model.request.user.FollowersListReq;
@@ -19,6 +21,9 @@ import java.util.ResourceBundle;
 public class FollowerController extends Controller implements Initializable {
 
     @FXML
+    private ImageView backImageview;
+
+    @FXML
     private Button followingButton;
 
     @FXML
@@ -30,6 +35,11 @@ public class FollowerController extends Controller implements Initializable {
     void followingButtonPressed(ActionEvent event) {
         changeView("following", event);
 
+    }
+
+    @FXML
+    void backImageviewPressed(MouseEvent event) {
+        changeView("profile", event);
     }
 
     @Override
