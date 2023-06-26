@@ -2,8 +2,11 @@ package connect.service;
 
 import model.Config;
 import model.Response;
+import model.exception.ConfigNotFoundException;
 import model.exception.UserNotFoundException;
 import model.request.user.*;
+import model.response.GetFollowersListRes;
+import model.response.GetFollowingListRes;
 import model.response.GetUserProfileRes;
 import model.user.User;
 
@@ -320,6 +323,61 @@ public class UserService {
             return new Response(request.getSenderId(), false , e.getMessage());
         }
         return new Response(request.getSenderId(), true , "User unblocked successfully.");
+    }
+
+    public Response getFollowersList(FollowersListReq request){
+
+        ArrayList<User> followerList = new ArrayList<>();
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
+            boolean flag = false;
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if (readUser.getId().equals(request.getSenderId())){
+                    followerList = readUser.getFollowers();
+                    flag = true;
+                    return new GetFollowersListRes(request.getSenderId() , true , "followers request list sent." , followerList);
+                }
+            }
+            if (!flag){
+                throw new ConfigNotFoundException("user not found.");
+            }
+        }
+        catch (ConfigNotFoundException e) {
+            return new GetFollowersListRes(request.getSenderId() , false , e.getMessage() , null);
+        }catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException();
+        }
+
+        return null;
+    }
+
+    public Response getFollowingList(FollowingListReq request){
+            ArrayList<User> followingList = new ArrayList<>();
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
+            boolean flag = false;
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if (readUser.getId().equals(request.getSenderId())){
+                    followingList = readUser.getFollowing();
+                    flag = true;
+                    return new GetFollowingListRes(request.getSenderId() , true , "following request list sent." , followingList);
+                }
+            }
+            if (!flag){
+                throw new ConfigNotFoundException("user not found.");
+            }
+        }
+        catch (ConfigNotFoundException e) {
+            return new GetFollowingListRes(request.getSenderId() , false , e.getMessage() , null);
+        }catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException();
+        }
+
+        return null;
     }
 
 }

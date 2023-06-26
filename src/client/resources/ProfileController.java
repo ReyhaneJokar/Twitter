@@ -8,7 +8,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.exception.ResponseNotFoundException;
 import model.request.user.MyProfileReq;
@@ -27,9 +26,6 @@ public class ProfileController extends Controller implements Initializable {
 
     @FXML
     private Label dateLabel;
-
-    @FXML
-    private Button editProfileButton;
 
     @FXML
     private Label errorLabel;
@@ -75,7 +71,7 @@ public class ProfileController extends Controller implements Initializable {
 
     @FXML
     void chatImageviewPressed(MouseEvent event) {
-
+        //not implemented yet
     }
 
     @FXML
@@ -85,12 +81,12 @@ public class ProfileController extends Controller implements Initializable {
 
     @FXML
     void followersButton(ActionEvent event) {
-
+        changeView("follower", event);
     }
 
     @FXML
     void followingButtonPressed(ActionEvent event) {
-
+        changeView("following" , event);
     }
 
     @FXML
@@ -100,22 +96,12 @@ public class ProfileController extends Controller implements Initializable {
 
     @FXML
     void searchImageviewPressed(MouseEvent event) {
-
-    }
-
-    @FXML
-    void userImageviewPressed(MouseEvent event) {
-
-    }
-
-    @FXML
-    void websiteHyperlinkChanged(KeyEvent event) {
-
+        //not implemented yet
     }
 
     @FXML
     void websiteHyperlinkPressed(ActionEvent event) {
-
+        //not implemented yet
     }
 
     @Override

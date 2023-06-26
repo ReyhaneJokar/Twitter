@@ -47,11 +47,25 @@ public class UserApi {
             case UNBLOCK:
                 unblock((UnblockReq) request);
                 break;
+            case GET_FOLLOWERS:
+                get_followers((FollowersListReq) request);
+                break;
+            case GET_FOLLOWING:
+                get_following((FollowingListReq) request);
+                break;
             default:
                 throw new InvalidTypeException();
         }
     }
 
+
+    private void get_followers(FollowersListReq request){
+        sendResponse(service.getFollowersList(request));
+    }
+
+    private void get_following(FollowingListReq request){
+        sendResponse(service.getFollowingList(request));
+    }
 
     private void get_profile(MyProfileReq request){
         sendResponse(service.get_profile(request));
