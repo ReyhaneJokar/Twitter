@@ -39,7 +39,7 @@ public class SearchController extends Controller {
 
     @FXML
     void chatImageviewPressed(MouseEvent event) {
-
+        //not implemented yet
     }
 
     @FXML

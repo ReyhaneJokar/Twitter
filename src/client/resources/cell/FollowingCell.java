@@ -18,7 +18,7 @@ import model.user.User;
 
 public class FollowingCell extends AnchorPane {
 
-    protected final ClientThread clientThread = ClientThread.getClientThread();
+    private ClientThread clientThread;
 
     private User user;
     private Circle profileCircle;
@@ -27,6 +27,8 @@ public class FollowingCell extends AnchorPane {
     private Button unfollowButton;
 
     public FollowingCell(User user) {
+        this.clientThread = ClientThread.getClientThread();
+
         this.user = user;
         profileCircle = new Circle(27);
         profileCircle.setStroke(Color.GRAY);
@@ -35,7 +37,7 @@ public class FollowingCell extends AnchorPane {
             profileCircle.setFill(new ImagePattern(user.getProfile().getAvatar()));
         }
         nameLabel = new Label(user.getName());
-        idLabel = new Label(user.getId());
+        idLabel = new Label("@" + user.getId());
         unfollowButton = new Button("Unfollow");
         this.getChildren().addAll(profileCircle , nameLabel , idLabel , unfollowButton);
         setConfig();
@@ -77,7 +79,7 @@ public class FollowingCell extends AnchorPane {
     private void setActions(){
         unfollowButton.setOnAction(event -> {
             //unfollow user
-            clientThread.send(new UnFollowReq(clientThread.getId(), idLabel.getText()));
+            clientThread.send(new UnFollowReq(clientThread.getId(), this.user.getId()));
             try {
                 Response response = clientThread.getReceiver().getResponse();
 

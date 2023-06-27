@@ -43,13 +43,13 @@ public class AuthenticationService {
         user.getProfile().setLocation(request.getCountry());
 
         //for test
-//        User user2 = new User("curlyrey" , "reyhan" , "jokar" , "rey@gmail.com" , null , "jkR138237" , "Iran" , null);
-//        user.getFollowers().add(user2);
-//        user2.getFollowing().add(user);
+        User user2 = new User("curlyrey" , "reyhan" , "jokar" , "rey@gmail.com" , null , "jkR138237" , "Iran" , null);
+        user.getFollowers().add(user2);
+        user2.getFollowing().add(user);
 
         try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME() , true))) {
             out.writeObject(user);
-            //out.writeObject(user2);
+            out.writeObject(user2);
         } catch (IOException e) {
             e.printStackTrace();
         }

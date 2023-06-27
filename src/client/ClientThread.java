@@ -62,8 +62,7 @@ public class ClientThread implements Runnable{
     {
         try {
             outputStream.writeObject(request);
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

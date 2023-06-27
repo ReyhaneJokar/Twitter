@@ -7,7 +7,7 @@
 
 <AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.resources.HomeController">
    <children>
-      <GridPane hgap="8.0" layoutX="-2.0" layoutY="542.0" prefWidth="500.0">
+      <GridPane hgap="8.0" layoutX="-2.0" layoutY="549.0" prefWidth="500.0">
         <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

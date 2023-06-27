@@ -157,7 +157,7 @@ public class EditProfileController extends Controller implements Initializable {
                 //closeScene();
             }
 
-            idLabel.setText(response.getId());
+            idLabel.setText("@" + response.getId());
             nameLabel.setText(response.getName());
             bioTextfield.setText(response.getProfile().getBio());
             locationLabel.setText(response.getProfile().getLocation());

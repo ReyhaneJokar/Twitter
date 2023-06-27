@@ -98,7 +98,7 @@ public class ProfileController extends Controller implements Initializable {
 
     @FXML
     void searchImageviewPressed(MouseEvent event) {
-        //not implemented yet
+        changeView("search", event);
     }
 
     @FXML
@@ -119,7 +119,7 @@ public class ProfileController extends Controller implements Initializable {
                 //closeScene();
             }
 
-            idLabel.setText(response.getId());
+            idLabel.setText("@" + response.getId());
             nameLabel.setText(response.getName());
             bioLabel.setText(response.getProfile().getBio());
             locationLabel.setText(response.getProfile().getLocation());

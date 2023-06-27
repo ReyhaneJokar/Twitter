@@ -24,12 +24,12 @@ public class HomeController extends Controller{
 
     @FXML
     void chatImageviewPressed(MouseEvent event) {
-
+        //not implemented yet
     }
 
     @FXML
     void searchImageviewPressed(MouseEvent event) {
-
+        changeView("search", event);
     }
 
     @FXML
