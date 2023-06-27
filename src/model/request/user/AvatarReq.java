@@ -1,16 +1,14 @@
 package model.request.user;
 
-import javafx.scene.image.Image;
-
 public class AvatarReq extends UserRequest {
-    private final Image avatar;
+    private final byte[] avatar;
 
-    public AvatarReq(String senderId, Image avatar) {
+    public AvatarReq(String senderId, byte[] avatar) {
         super(senderId, UserRequestType.SET_AVATAR);
         this.avatar = avatar;
     }
 
-    public Image getAvatar() {
+    public byte[] getAvatar() {
         return avatar;
     }
 }

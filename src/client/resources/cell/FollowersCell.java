@@ -3,6 +3,7 @@ package client.resources.cell;
 import client.ClientThread;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -15,6 +16,9 @@ import model.exception.ResponseNotFoundException;
 import model.exception.UserNotFoundException;
 import model.request.user.FollowReq;
 import model.user.User;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 public class FollowersCell extends AnchorPane {
 
@@ -34,7 +38,8 @@ public class FollowersCell extends AnchorPane {
         profileCircle.setStroke(Color.GRAY);
         profileCircle.setFill(Color.SNOW);
         if (user.getProfile().getAvatar() != null){
-            profileCircle.setFill(new ImagePattern(user.getProfile().getAvatar()));
+            InputStream inputStream = new ByteArrayInputStream(user.getProfile().getAvatar());
+            profileCircle.setFill(new ImagePattern(new Image(inputStream)));
         }
         nameLabel = new Label(user.getName());
         idLabel = new Label("@" + user.getId());

@@ -19,7 +19,9 @@ import model.request.user.HeaderReq;
 import model.request.user.MyProfileReq;
 import model.response.GetUserProfileRes;
 
-import java.io.File;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -86,7 +88,17 @@ public class EditProfileController extends Controller implements Initializable {
 
         if (file != null){
             headerImageview.setImage(new Image(file.toURI().toString()));
-            clientThread.send(new HeaderReq(clientThread.getId(), headerImageview.getImage()));
+
+            try {
+                BufferedImage bufferedImage = ImageIO.read(file);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                ImageIO.write(bufferedImage, "jpg", outputStream);
+                clientThread.send(new HeaderReq(clientThread.getId(), outputStream.toByteArray()));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             try {
                 Response response = clientThread.getReceiver().getResponse();
                 if (!response.isAccepted()){
@@ -114,7 +126,17 @@ public class EditProfileController extends Controller implements Initializable {
             profileCircle.setFill(new ImagePattern(image));
 
 
-            clientThread.send(new AvatarReq(clientThread.getId(), new Image(file.toURI().toString())));
+
+            try {
+                BufferedImage bufferedImage = ImageIO.read(file);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                ImageIO.write(bufferedImage, "jpg", outputStream);
+                clientThread.send(new AvatarReq(clientThread.getId(), outputStream.toByteArray()));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             try {
                 Response response = clientThread.getReceiver().getResponse();
                 if (!response.isAccepted()){
@@ -169,13 +191,13 @@ public class EditProfileController extends Controller implements Initializable {
             dateLabel.setText(date);
 
             if (response.getProfile().getHeader() != null){
-                headerImageview.setImage(response.getProfile().getHeader());
+                InputStream inputStream = new ByteArrayInputStream(response.getProfile().getHeader());
+                headerImageview.setImage(new Image(inputStream));
             }
             if (response.getProfile().getAvatar() != null){
-                profileCircle.setFill(new ImagePattern(response.getProfile().getAvatar()));
+                InputStream inputStream = new ByteArrayInputStream(response.getProfile().getAvatar());
+                profileCircle.setFill(new ImagePattern(new Image(inputStream)));
             }
-
-//            profileImageview.setImage(response.getProfile().getAvatar());
 
         } catch(ResponseNotFoundException e) {
             //closeScene();

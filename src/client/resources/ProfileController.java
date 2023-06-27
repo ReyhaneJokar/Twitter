@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
@@ -14,6 +15,8 @@ import model.exception.ResponseNotFoundException;
 import model.request.user.MyProfileReq;
 import model.response.GetUserProfileRes;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -133,16 +136,13 @@ public class ProfileController extends Controller implements Initializable {
             dateLabel.setText(date);
 
             if (response.getProfile().getHeader() != null){
-                headerImageview.setImage(response.getProfile().getHeader());
+                InputStream inputStream = new ByteArrayInputStream(response.getProfile().getHeader());
+                headerImageview.setImage(new Image(inputStream));
             }
             if (response.getProfile().getAvatar() != null){
-                profileCircle.setFill(new ImagePattern(response.getProfile().getAvatar()));
-
-                //profileImageview.setImage(response.getProfile().getAvatar());
+                InputStream inputStream = new ByteArrayInputStream(response.getProfile().getAvatar());
+                profileCircle.setFill(new ImagePattern(new Image(inputStream)));
             }
-//            else {
-//                profileCircle.setFill(new ImagePattern(new Image("pic/profile.png")));
-//            }
         } catch(ResponseNotFoundException e) {
             //closeScene();
         }

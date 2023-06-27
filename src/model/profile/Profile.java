@@ -1,18 +1,16 @@
 package model.profile;
 
-import javafx.scene.image.Image;
-
 import java.io.Serializable;
 
 public class Profile implements Serializable {
-    private Image avatar, header;
+    private byte[] avatar, header;
     private String bio, location, website;
 
-    public void setAvatar(Image avatar) {
+    public void setAvatar(byte[] avatar) {
         this.avatar = avatar;
     }
 
-    public void setHeader(Image header) {
+    public void setHeader(byte[] header) {
         this.header = header;
     }
 
@@ -28,11 +26,11 @@ public class Profile implements Serializable {
         this.website = website;
     }
 
-    public Image getAvatar() {
+    public byte[] getAvatar() {
         return avatar;
     }
 
-    public Image getHeader() {
+    public byte[] getHeader() {
         return header;
     }
 
