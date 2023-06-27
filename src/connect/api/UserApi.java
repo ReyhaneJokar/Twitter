@@ -19,6 +19,9 @@ public class UserApi {
 
 
     protected void getRequest(UserRequest request) throws InvalidTypeException {
+//        System.out.println("You are here :D");
+//        System.out.println(request.getClass().getSimpleName());
+//        System.out.println(request.getSubType().name());
         switch(request.getSubType()) {
             case MY_PROFILE:
                 get_profile((MyProfileReq) request);
@@ -55,6 +58,7 @@ public class UserApi {
                 break;
             case SEARCH:
                 search((SearchReq) request);
+                break;
             default:
                 throw new InvalidTypeException();
         }
@@ -119,14 +123,7 @@ public class UserApi {
 
     private void handleResponse(Response response , UserRequest request)
     {
-//        try {
-//            sender.sendResponse(response , request.getServerThread());
-//        }
-//        catch (ServerThreadNotFoundException e) {
-//            e.printStackTrace();
-//        }
-
-
+        sendResponse(response);
     }
 
     private void sendResponse(Response response)
