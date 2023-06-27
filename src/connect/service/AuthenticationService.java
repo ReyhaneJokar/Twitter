@@ -7,6 +7,7 @@ import model.request.Authentication.SignUpReq;
 import model.user.User;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class AuthenticationService {
 
@@ -16,8 +17,10 @@ public class AuthenticationService {
         config = Config.getInstance();
     }
 
-    public synchronized Response signup(SignUpReq request){
+    public Response signup(SignUpReq request){
         User user = new User(request.getSenderId() , request.getName() , request.getLastname() , request.getEmail(), request.getPhone(), request.getPassword(), request.getCountry(), request.getBirthdate());
+
+        ArrayList<User> allUsers = new ArrayList<>();
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
@@ -32,6 +35,7 @@ public class AuthenticationService {
                 else if(readUser.getPhone().equals(user.getPhone())){
                     return new Response(request.getSenderId(), false , "This phone number is used before!");
                 }
+                allUsers.add(readUser);
             }
 
         } catch (ClassNotFoundException | IOException e) {
@@ -41,15 +45,17 @@ public class AuthenticationService {
         user.getProfile().setAvatar(null);
         user.getProfile().setHeader(null);
         user.getProfile().setLocation(request.getCountry());
+        allUsers.add(user);
 
         //for test
 //        User user2 = new User("curlyrey" , "reyhan" , "jokar" , "rey@gmail.com" , null , "jkR138237" , "Iran" , null);
 //        user.getFollowers().add(user2);
 //        user2.getFollowing().add(user);
 
-        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME() , true))) {
-            out.writeObject(user);
-            //out.writeObject(user2);
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME()))) {
+            for (int i = 0; i < allUsers.size(); i++) {
+                out.writeObject(allUsers.get(i));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,7 +63,7 @@ public class AuthenticationService {
         return new Response(request.getSenderId(), true , "User signed up successfully!");
     }
 
-    public synchronized Response login(LogInReq request){
+    public Response login(LogInReq request){
 
         User user = new User(request.getSenderId() , request.getPassword());
 
