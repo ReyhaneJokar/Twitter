@@ -7,6 +7,7 @@ import model.exception.UserNotFoundException;
 import model.request.user.*;
 import model.response.GetFollowersListRes;
 import model.response.GetFollowingListRes;
+import model.response.GetSearchResultRes;
 import model.response.GetUserProfileRes;
 import model.user.User;
 
@@ -21,7 +22,7 @@ public class UserService {
         config = Config.getInstance();
     }
 
-    public Response get_profile(MyProfileReq request){
+    public synchronized Response get_profile(MyProfileReq request){
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
             boolean flag = false;
@@ -43,7 +44,7 @@ public class UserService {
         return null;
     }
 
-    public Response set_avatar(AvatarReq request)
+    public synchronized Response set_avatar(AvatarReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
 
@@ -72,7 +73,7 @@ public class UserService {
         return new Response(request.getSenderId(), true , "Avatar changed successfully.");
     }
 
-    public Response set_header(HeaderReq request)
+    public synchronized Response set_header(HeaderReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
 
@@ -101,7 +102,7 @@ public class UserService {
         return new Response(request.getSenderId(), true , "Header changed successfully.");
     }
 
-    public Response set_bio(BioReq request)
+    public synchronized Response set_bio(BioReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
 
@@ -130,7 +131,7 @@ public class UserService {
         return new Response(request.getSenderId(), true , "Bio changed successfully.");
     }
 
-    public Response follow(FollowReq request)
+    public synchronized Response follow(FollowReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
         User actionUser = null;
@@ -180,7 +181,7 @@ public class UserService {
         return new Response(request.getSenderId(), true , "User followed successfully.");
     }
 
-    public Response unfollow(UnFollowReq request)
+    public synchronized Response unfollow(UnFollowReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
         User targetUser = null;
@@ -230,14 +231,14 @@ public class UserService {
         return new Response(request.getSenderId(), true , "User unfollowed successfully.");
     }
 
-    public Response show_timeline(TimelineReq request)
+    public synchronized Response show_timeline(TimelineReq request)
     {
         // TODO implement here
         return null;
     }
 
 
-    public Response block_user(BlockReq request)
+    public synchronized Response block_user(BlockReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
         User targetUser;
@@ -281,7 +282,7 @@ public class UserService {
         return new Response(request.getSenderId(), true , "User blocked successfully.");
     }
 
-    public Response unblock(UnblockReq request)
+    public synchronized Response unblock(UnblockReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
         User targetUser;
@@ -325,7 +326,7 @@ public class UserService {
         return new Response(request.getSenderId(), true , "User unblocked successfully.");
     }
 
-    public Response getFollowersList(FollowersListReq request){
+    public synchronized Response getFollowersList(FollowersListReq request){
 
         ArrayList<User> followerList = new ArrayList<>();
 
@@ -353,8 +354,8 @@ public class UserService {
         return null;
     }
 
-    public Response getFollowingList(FollowingListReq request){
-            ArrayList<User> followingList = new ArrayList<>();
+    public synchronized Response getFollowingList(FollowingListReq request){
+        ArrayList<User> followingList = new ArrayList<>();
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
@@ -380,4 +381,33 @@ public class UserService {
         return null;
     }
 
+    public synchronized Response search(SearchReq request) {
+        ArrayList<User> resultUsers = new ArrayList<>();
+        User senderUser = null;
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
+            boolean flag = false;
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if (readUser.getName().equalsIgnoreCase(request.getSearchText()) || readUser.getLastname().equalsIgnoreCase(request.getSearchText()) || readUser.getId().equals(request.getSearchText())){
+                    if (!readUser.getId().equals(request.getSenderId())){
+                        resultUsers.add(readUser);
+                    }
+                }
+                if(readUser.getId().equals(request.getSenderId())){
+                    senderUser = readUser;
+                    flag = true;
+                }
+            }
+            if (!flag){
+                throw new UserNotFoundException();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException();
+        } catch (UserNotFoundException e) {
+            return new GetSearchResultRes(request.getSenderId(), false , "sender user not found" , resultUsers , null);
+        }
+        return new GetSearchResultRes(request.getSenderId(), true , "result of search sent" , resultUsers , senderUser);
+    }
 }

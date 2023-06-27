@@ -53,11 +53,17 @@ public class UserApi {
             case GET_FOLLOWING:
                 get_following((FollowingListReq) request);
                 break;
+            case SEARCH:
+                search((SearchReq) request);
             default:
                 throw new InvalidTypeException();
         }
     }
 
+
+    private void search(SearchReq request){
+        sendResponse(service.search(request));
+    }
 
     private void get_followers(FollowersListReq request){
         sendResponse(service.getFollowersList(request));

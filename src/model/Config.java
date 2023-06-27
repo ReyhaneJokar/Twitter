@@ -11,7 +11,7 @@ import java.io.IOException;
 public class Config {
     private static Config instance = null;
 
-    private final String CONFIG_FILE_NAME = "D:\\AP\\midterm-project\\6\\config.txt";
+    private final String CONFIG_FILE_NAME = "D:\\AP\\midterm-project\\7\\config.txt";
     private String FILE_NAME;
     private int PORT;
 

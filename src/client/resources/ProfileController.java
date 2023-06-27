@@ -8,6 +8,8 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import model.exception.ResponseNotFoundException;
 import model.request.user.MyProfileReq;
 import model.response.GetUserProfileRes;
@@ -57,9 +59,6 @@ public class ProfileController extends Controller implements Initializable {
     private Label nameLabel;
 
     @FXML
-    private ImageView profileImageview;
-
-    @FXML
     private ImageView searchImageview;
 
     @FXML
@@ -67,6 +66,10 @@ public class ProfileController extends Controller implements Initializable {
 
     @FXML
     private Hyperlink websiteHyperlink;
+
+    @FXML
+    private Circle profileCircle;
+
 
     @FXML
     void chatImageviewPressed(MouseEvent event) {
@@ -105,6 +108,7 @@ public class ProfileController extends Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
         try {
             clientThread.send(new MyProfileReq(clientThread.getId()));
 
@@ -128,15 +132,17 @@ public class ProfileController extends Controller implements Initializable {
             date += " " + response.getDate().toString().split(" ")[1];
             dateLabel.setText(date);
 
-//            headerImageview.setImage(response.getProfile().getHeader());
-//            profileImageview.setImage(response.getProfile().getAvatar());
-
-            if (response.getProfile().getAvatar() != null){
+            if (response.getProfile().getHeader() != null){
                 headerImageview.setImage(response.getProfile().getHeader());
             }
             if (response.getProfile().getAvatar() != null){
-                profileImageview.setImage(response.getProfile().getAvatar());
+                profileCircle.setFill(new ImagePattern(response.getProfile().getAvatar()));
+
+                //profileImageview.setImage(response.getProfile().getAvatar());
             }
+//            else {
+//                profileCircle.setFill(new ImagePattern(new Image("pic/profile.png")));
+//            }
         } catch(ResponseNotFoundException e) {
             //closeScene();
         }

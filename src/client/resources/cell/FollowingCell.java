@@ -1,8 +1,6 @@
 package client.resources.cell;
 
 import client.ClientThread;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -33,10 +31,12 @@ public class FollowingCell extends AnchorPane {
         profileCircle = new Circle(27);
         profileCircle.setStroke(Color.GRAY);
         profileCircle.setFill(Color.SNOW);
-        profileCircle.setFill(new ImagePattern(user.getProfile().getAvatar()));
+        if (user.getProfile().getAvatar() != null){
+            profileCircle.setFill(new ImagePattern(user.getProfile().getAvatar()));
+        }
         nameLabel = new Label(user.getName());
         idLabel = new Label(user.getId());
-        unfollowButton.setText("Unfollow");
+        unfollowButton = new Button("Unfollow");
         this.getChildren().addAll(profileCircle , nameLabel , idLabel , unfollowButton);
         setConfig();
         setLocation();
@@ -44,14 +44,14 @@ public class FollowingCell extends AnchorPane {
     }
 
     private void setConfig(){
-        this.setPrefSize(493,68);
-        this.setMinSize(493,68);
-        this.setMaxSize(493,68);
+        this.setPrefSize(470,68);
+        this.setMinSize(470,68);
+        this.setMaxSize(470,68);
         this.setStyle("-fx-background-color:white;" + "-fx-border-color:#3E3B3B");
 
-        nameLabel.setFont(Font.font("Roboto-Bold", FontWeight.BOLD,21));
+        nameLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD,21));
         nameLabel.setStyle("-fx-text-fill:black;");
-        idLabel.setFont(Font.font("Roboto", FontWeight.BOLD,17));
+        idLabel.setFont(Font.font("Roboto",14));
         idLabel.setStyle("-fx-text-fill:gray;");
 
         unfollowButton.setPrefSize(80,25);
@@ -62,40 +62,37 @@ public class FollowingCell extends AnchorPane {
     }
 
     private void setLocation(){
-        AnchorPane.setTopAnchor(profileCircle,10.0);
+        AnchorPane.setTopAnchor(profileCircle,8.0);
         AnchorPane.setLeftAnchor(profileCircle,10.0);
 
         AnchorPane.setTopAnchor(nameLabel,12.0);
-        AnchorPane.setLeftAnchor(nameLabel,65.0);
-        AnchorPane.setTopAnchor(idLabel,45.0);
-        AnchorPane.setLeftAnchor(idLabel,65.0);
+        AnchorPane.setLeftAnchor(nameLabel,70.0);
+        AnchorPane.setTopAnchor(idLabel,40.0);
+        AnchorPane.setLeftAnchor(idLabel,70.0);
 
-        AnchorPane.setTopAnchor(unfollowButton , 12.0);
-        AnchorPane.setRightAnchor(unfollowButton , 10.0);
+        AnchorPane.setTopAnchor(unfollowButton , 20.0);
+        AnchorPane.setRightAnchor(unfollowButton , 20.0);
     }
 
     private void setActions(){
-        unfollowButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                //unfollow user
-                clientThread.send(new UnFollowReq(clientThread.getId(), idLabel.getText()));
-                try {
-                    Response response = clientThread.getReceiver().getResponse();
+        unfollowButton.setOnAction(event -> {
+            //unfollow user
+            clientThread.send(new UnFollowReq(clientThread.getId(), idLabel.getText()));
+            try {
+                Response response = clientThread.getReceiver().getResponse();
 
-                    if(response.isAccepted()) {
+                if(response.isAccepted()) {
 
-                        unfollowButton.setText("unfollowed");
-                        unfollowButton.setTextFill(Paint.valueOf("white"));
-                        unfollowButton.setStyle("-fx-background-color:#0da5f3;");
-                    }
-                    else{
-                        throw new UserNotFoundException();
-                    }
-
-                } catch (ResponseNotFoundException | UserNotFoundException e) {
-                    e.printStackTrace();
+                    unfollowButton.setText("unfollowed");
+                    unfollowButton.setTextFill(Paint.valueOf("white"));
+                    unfollowButton.setStyle("-fx-background-color:#0da5f3;");
                 }
+                else{
+                    throw new UserNotFoundException();
+                }
+
+            } catch (ResponseNotFoundException | UserNotFoundException e) {
+                e.printStackTrace();
             }
         });
     }

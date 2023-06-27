@@ -16,7 +16,7 @@ public class AuthenticationService {
         config = Config.getInstance();
     }
 
-    public Response signup(SignUpReq request){
+    public synchronized Response signup(SignUpReq request){
         User user = new User(request.getSenderId() , request.getName() , request.getLastname() , request.getEmail(), request.getPhone(), request.getPassword(), request.getCountry(), request.getBirthdate());
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
@@ -41,8 +41,15 @@ public class AuthenticationService {
 //        user.getProfile().setAvatar(new Image("pic/profile.png"));
 //        user.getProfile().setHeader(new Image("pic/header.blue2.png"));
         user.getProfile().setLocation(request.getCountry());
+
+        //for test
+//        User user2 = new User("curlyrey" , "reyhan" , "jokar" , "rey@gmail.com" , null , "jkR138237" , "Iran" , null);
+//        user.getFollowers().add(user2);
+//        user2.getFollowing().add(user);
+
         try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME() , true))) {
             out.writeObject(user);
+            //out.writeObject(user2);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -50,7 +57,7 @@ public class AuthenticationService {
         return new Response(request.getSenderId(), true , "User signed up successfully!");
     }
 
-    public Response login(LogInReq request){
+    public synchronized Response login(LogInReq request){
 
         User user = new User(request.getSenderId() , request.getPassword());
 

@@ -38,6 +38,6 @@
          </padding>
       </GridPane>
       <Separator layoutY="76.0" prefHeight="16.0" prefWidth="500.0" />
-      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="83.0" pannable="true" prefHeight="517.0" prefWidth="500.0" style="-fx-background-color: white;" vbarPolicy="ALWAYS" />
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="84.0" pannable="true" prefHeight="516.0" prefWidth="500.0" style="-fx-background-color: white;" vbarPolicy="ALWAYS" />
    </children>
 </AnchorPane>

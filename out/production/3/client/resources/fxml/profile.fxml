@@ -4,6 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.text.*?>
 
 <AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.resources.ProfileController">
@@ -49,11 +50,6 @@
             <Insets bottom="14.0" left="14.0" right="14.0" top="14.0" />
          </padding>
       </GridPane>
-      <ImageView fx:id="profileImageview" cache="true" fitHeight="106.0" fitWidth="118.0" layoutY="69.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../pic/profile.png" />
-         </image>
-      </ImageView>
       <Label fx:id="nameLabel" layoutX="21.0" layoutY="177.0" prefHeight="23.0" prefWidth="164.0" text="Name">
          <font>
             <Font name="Arial Rounded MT Bold" size="20.0" />
@@ -119,5 +115,6 @@
          <font>
             <Font size="14.0" />
          </font></Label>
+      <Circle fx:id="profileCircle" fill="#fffcfc" layoutX="53.0" layoutY="120.0" radius="50.0" stroke="GREY" strokeType="INSIDE" />
    </children>
 </AnchorPane>

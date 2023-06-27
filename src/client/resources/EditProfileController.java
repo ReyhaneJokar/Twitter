@@ -8,6 +8,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import model.Response;
 import model.exception.ResponseNotFoundException;
@@ -54,7 +56,7 @@ public class EditProfileController extends Controller implements Initializable {
     private Label nameLabel;
 
     @FXML
-    private ImageView profileImageview;
+    private Circle profileCircle;
 
     @FXML
     private TextField websiteTextfield;
@@ -108,8 +110,11 @@ public class EditProfileController extends Controller implements Initializable {
         File file = openFileChooser(fileChooser);
 
         if (file != null){
-            profileImageview.setImage(new Image(file.toURI().toString()));
-            clientThread.send(new AvatarReq(clientThread.getId(), profileImageview.getImage()));
+            Image image = new Image(file.toURI().toString());
+            profileCircle.setFill(new ImagePattern(image));
+
+
+            clientThread.send(new AvatarReq(clientThread.getId(), new Image(file.toURI().toString())));
             try {
                 Response response = clientThread.getReceiver().getResponse();
                 if (!response.isAccepted()){
@@ -163,8 +168,14 @@ public class EditProfileController extends Controller implements Initializable {
             date += " " + response.getDate().toString().split(" ")[1];
             dateLabel.setText(date);
 
-            headerImageview.setImage(response.getProfile().getHeader());
-            profileImageview.setImage(response.getProfile().getAvatar());
+            if (response.getProfile().getHeader() != null){
+                headerImageview.setImage(response.getProfile().getHeader());
+            }
+            if (response.getProfile().getAvatar() != null){
+                profileCircle.setFill(new ImagePattern(response.getProfile().getAvatar()));
+            }
+
+//            profileImageview.setImage(response.getProfile().getAvatar());
 
         } catch(ResponseNotFoundException e) {
             //closeScene();

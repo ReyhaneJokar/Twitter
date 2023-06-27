@@ -34,7 +34,6 @@ public class FollowerController extends Controller implements Initializable {
     @FXML
     void followingButtonPressed(ActionEvent event) {
         changeView("following", event);
-
     }
 
     @FXML

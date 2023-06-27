@@ -42,6 +42,10 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public String getLastname() {
+        return lastname;
+    }
+
     public String getName() {
         return name;
     }
