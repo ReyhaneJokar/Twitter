@@ -23,6 +23,7 @@ import java.io.*;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.UUID;
 
 public class AddTweetController extends Controller implements Initializable {
 
@@ -87,11 +88,10 @@ public class AddTweetController extends Controller implements Initializable {
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "jpg", outputStream);
 
-                clientThread.send(new TweetReq(clientThread.getId(), tweetTextfield.getText() , outputStream.toByteArray(), 0 , 0 , new Date() , null));
-
+                clientThread.send(new TweetReq(clientThread.getId() , UUID.randomUUID(), tweetTextfield.getText() , outputStream.toByteArray(), 0 , 0 , new Date() , null , null));
             }
             else {
-                clientThread.send(new TweetReq(clientThread.getId(), tweetTextfield.getText() , null, 0 , 0 , new Date() , null));
+                clientThread.send(new TweetReq(clientThread.getId() , UUID.randomUUID(), tweetTextfield.getText() , null, 0 , 0 , new Date() , null , null));
             }
         } catch (IOException e) {
             e.printStackTrace();

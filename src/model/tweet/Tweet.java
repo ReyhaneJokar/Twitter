@@ -17,8 +17,8 @@ public class Tweet implements Serializable {
     private ArrayList<Tweet> replies;
     private User user ;
 
-    public Tweet(String text, byte[] image, Date date , User user) {
-        this.uuid = UUID.randomUUID();
+    public Tweet(UUID uuid , String text, byte[] image, Date date , User user) {
+        this.uuid = uuid;
         this.text = text;
         this.image = image;
         this.date = date;

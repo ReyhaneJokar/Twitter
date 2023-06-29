@@ -10,6 +10,7 @@ import model.user.User;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class AuthenticationService {
 
@@ -51,9 +52,9 @@ public class AuthenticationService {
 
         //for test
 
-        Tweet tweet = new Tweet("hello " , null, new Date() , user);
+        Tweet tweet = new Tweet(UUID.randomUUID() , "hello " , null, new Date() , user);
         user.getTweets().add(tweet);
-        Tweet tweet1 = new Tweet("bye " , null, new Date() , user);
+        Tweet tweet1 = new Tweet(UUID.randomUUID() , "bye " , null, new Date() , user);
         user.getTweets().add(tweet);
 
 

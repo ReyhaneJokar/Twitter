@@ -26,7 +26,7 @@ public class TweetService {
             while (fileInputStream.available() > 0){
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
-                    readUser.getTweets().add(new Tweet(request.getText() , request.getImage() , request.getDate() , readUser));
+                    readUser.getTweets().add(new Tweet(request.getUuid() , request.getText() , request.getImage() , request.getDate() , readUser));
                 }
                 allUsers.add(readUser);
             }
@@ -49,7 +49,39 @@ public class TweetService {
 
     public Response retweet(RetweetReq request){
 
-        return null;
+        ArrayList<User> allUsers = new ArrayList<>();
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)){
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if (readUser.getId().equals(request.getSenderId())){
+                    readUser.getTweets().add(new Tweet(request.getUuid() , request.getText() , request.getImage() , request.getDate() , request.getUser()));
+                }
+                else if (readUser.getId().equals(request.getUser().getId())){
+                    for (int i = 0; i < readUser.getTweets().size(); i++) {
+                        if (readUser.getTweets().get(i).getUuid().equals(request.getUuid())){
+                            readUser.getTweets().get(i).setRetweets(readUser.getTweets().get(i).getRetweets()+1);
+                            break;
+                        }
+                    }
+                }
+                allUsers.add(readUser);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            return new Response(request.getSenderId(), false , e.getMessage());
+        }
+
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME()))) {
+            for (int i = 0; i < allUsers.size(); i++) {
+                out.writeObject(allUsers.get(i));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Response(request.getSenderId(), false , e.getMessage());
+        }
+        return new Response(request.getSenderId(), true , "Tweet retweeted successfully.");
     }
 
     public Response quote(QuoteReq request){
@@ -111,7 +143,7 @@ public class TweetService {
         }
         
         Tweet targetTweet = new Tweet(request.getText() , request.getImage() , request.getLikes() , request.getRetweets() , request.getDate() , request.getReplies() , target , request.getUuid());
-        Tweet replyTweet = new Tweet(request.getReplyText() , request.getReplyImage() , request.getReplyLikes() , request.getReplyRetweets() , request.getReplyDate() , request.getReplyReplies() , sender , request.getReplyuuid());
+        Tweet replyTweet = new Tweet(request.getReplyText() , null , request.getReplyLikes() , request.getReplyRetweets() , request.getReplyDate() , request.getReplyReplies() , sender , request.getReplyuuid());
 
         ArrayList<User> allUsers = new ArrayList<>();
 

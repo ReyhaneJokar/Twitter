@@ -3,6 +3,7 @@ package model.request.tweet;
 import model.request.Request;
 import model.request.RequestType;
 import model.tweet.Tweet;
+import model.user.User;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,9 +18,10 @@ public abstract class TweetRequest extends Request {
     private final int likes, retweets;
     private final Date date;
     private final ArrayList<Tweet> replies;
+    private final User user;
 
 
-    public TweetRequest(String senderId, TweetReqType subType , UUID uuid , String text, byte[] image, int likes, int retweets, Date date, ArrayList<Tweet> replies) {
+    public TweetRequest(String senderId, TweetReqType subType , UUID uuid , String text, byte[] image, int likes, int retweets, Date date, ArrayList<Tweet> replies , User user) {
         super(senderId, RequestType.TWEET);
         this.subType = subType;
         this.uuid = uuid;
@@ -29,10 +31,15 @@ public abstract class TweetRequest extends Request {
         this.retweets = retweets;
         this.date = date;
         this.replies = replies;
+        this.user = user;
     }
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public String getText() {
