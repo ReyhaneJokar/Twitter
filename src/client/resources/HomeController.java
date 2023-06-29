@@ -1,17 +1,45 @@
 package client.resources;
 
+import client.resources.cell.TweetCell;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
+import javafx.fxml.Initializable;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import model.exception.ResponseNotFoundException;
+import model.request.user.MyProfileReq;
+import model.request.user.TimelineReq;
+import model.response.GetTimelineRes;
+import model.response.GetUserProfileRes;
+import model.tweet.Tweet;
 
-public class HomeController extends Controller{
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+
+public class HomeController extends Controller implements Initializable {
+
+    @FXML
+    private AnchorPane anchorPane;
+
+    @FXML
+    private ImageView addTweetImageview;
+
+    @FXML
+    private Circle profilePicCircle;
+
+    @FXML
+    private ScrollPane scrollPane;
 
     @FXML
     private ImageView chatImageview;
-
-    @FXML
-    private Label errorLabel;
 
     @FXML
     private ImageView homeImageview;
@@ -21,6 +49,9 @@ public class HomeController extends Controller{
 
     @FXML
     private ImageView userImageview;
+
+    private VBox tweetContent;
+
 
     @FXML
     void chatImageviewPressed(MouseEvent event) {
@@ -35,37 +66,64 @@ public class HomeController extends Controller{
     @FXML
     void userImageviewPressed(MouseEvent event) {
         changeView("profile", event).getController();
-        //newStageMaker("profile");
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+        tweetContent = new VBox();
+        scrollPane.setContent(tweetContent);
+        tweetContent.setSpacing(10);
+        tweetContent.setStyle("-fx-background-color:white;" + "-fx-padding: 8;");
+
+        try {
+            clientThread.send(new MyProfileReq(clientThread.getId()));
+
+            GetUserProfileRes response = (GetUserProfileRes) clientThread.getReceiver().getResponse();
+
+            if(!response.isAccepted())
+            {
+                //closeScene();
+            }
+
+            if (response.getProfile().getAvatar() != null){
+                InputStream inputStream = new ByteArrayInputStream(response.getProfile().getAvatar());
+                profilePicCircle.setFill(new ImagePattern(new Image(inputStream)));
+            }
+        } catch(ResponseNotFoundException e) {
+            //closeScene();
+        }
+
+        ArrayList<Tweet> tweets = new ArrayList<>();
+
+        //get tweets from server
+        try {
+            clientThread.send(new TimelineReq(clientThread.getId()));
+
+            GetTimelineRes response = (GetTimelineRes) clientThread.getReceiver().getResponse();
+            tweets = response.getTweets();
+
+            if(!response.isAccepted())
+            {
+                //closeScene();
+            }
+        } catch (ResponseNotFoundException e) {
+            //closeScene();
+        }
+
+        for (Tweet tweet : tweets) {
+            TweetCell tweetCell = new TweetCell(tweet);
+            tweetContent.getChildren().add(tweetCell);
+        }
 
     }
 
+    @FXML
+    void addTweetImageviewPressed(MouseEvent event) {
+        //System.out.println("pressed!");
+        changeView("addTweet", event);
+    }
 
-//    public FXMLLoader newStageMaker(String fxmlFile){
-//
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("fxml/" + fxmlFile + ".fxml"));
-//
-//        try {
-//
-//            Scene scene = new Scene(loader.load());
-//            scene.setFill(Color.TRANSPARENT);
-//
-//            Stage stage = new Stage();
-//            stage.setResizable(false);
-//            stage.setMinWidth(500);
-//            stage.setMinHeight(600);
-//
-////            stage.initStyle(StageStyle.UNDECORATED);
-////            stage.initStyle(StageStyle.TRANSPARENT);
-//
-//            stage.setScene(scene);
-//
-//            stage.show();
-//        }
-//        catch(IOException e){
-//            e.printStackTrace();
-//        }
-//
-//        return loader;
-//    }
+
 }
 

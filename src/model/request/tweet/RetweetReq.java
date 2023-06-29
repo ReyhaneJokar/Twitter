@@ -1,13 +1,13 @@
 package model.request.tweet;
 
-import javafx.scene.image.Image;
 import model.tweet.Tweet;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 public class RetweetReq extends TweetRequest {
-    public RetweetReq(String senderId, String text, Image image, int likes, int retweets, Date date, ArrayList<Tweet> replies) {
-        super(senderId, TweetReqType.RETWEET, text, image, likes, retweets, date, replies);
+    public RetweetReq(String senderId, UUID uuid , String text, byte[] image, int likes, int retweets, Date date, ArrayList<Tweet> replies) {
+        super(senderId, TweetReqType.RETWEET , uuid, text, image, likes, retweets, date, replies);
     }
 }

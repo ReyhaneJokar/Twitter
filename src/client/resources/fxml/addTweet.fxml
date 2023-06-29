@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.resources.AddTweetController">
+   <children>
+      <Separator layoutY="53.0" prefHeight="30.0" prefWidth="500.0" />
+      <ImageView fx:id="backImageview" fitHeight="43.0" fitWidth="47.0" onMouseClicked="#backImageview" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../pic/arrow.png" />
+         </image>
+      </ImageView>
+      <Circle fx:id="profileCircle" fill="#fffcfc" layoutX="43.0" layoutY="110.0" radius="27.0" stroke="GREY" strokeType="INSIDE" />
+      <Label fx:id="nameLabel" layoutX="91.0" layoutY="86.0" text="Name">
+         <font>
+            <Font name="Arial Rounded MT Bold" size="20.0" />
+         </font>
+      </Label>
+      <Label fx:id="idLabel" layoutX="91.0" layoutY="109.0" text="\@ID" textFill="GREY">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <TextArea fx:id="tweetTextfield" layoutX="26.0" layoutY="147.0" prefHeight="185.0" prefWidth="449.0" style="-fx-background-color: #242424; -fx-text-fill: black;" />
+      <ImageView fx:id="tweetImageview" fitHeight="162.0" fitWidth="449.0" layoutX="26.0" layoutY="345.0" onMouseClicked="#tweetImageviewPressed" pickOnBounds="true" preserveRatio="true" />
+      <ImageView fx:id="doneImageview" fitHeight="36.0" fitWidth="43.0" layoutX="422.0" layoutY="540.0" onMouseClicked="#doneImageviewPressed" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../pic/check.png" />
+         </image>
+      </ImageView>
+      <Label fx:id="errorLabel" layoutX="38.0" layoutY="546.0" prefHeight="30.0" prefWidth="356.0" textFill="#e24040" />
+   </children>
+</AnchorPane>

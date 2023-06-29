@@ -1,7 +1,9 @@
 package connect.api;
 
 import connect.service.TweetService;
+import model.Response;
 import model.exception.InvalidTypeException;
+import model.exception.UserThreadNotFoundException;
 import model.request.tweet.*;
 
 
@@ -31,30 +33,53 @@ public class TweetApi {
             case REPLY:
                 reply((ReplyReq) tweetRequest);
                 break;
+            case LIKE:
+                like((LikeTweetReq) tweetRequest);
+                break;
             default:
                 throw new InvalidTypeException();
         }
 
     }
 
+    private void like(LikeTweetReq tweetRequest){
+        handleResponse(service.like(tweetRequest) , tweetRequest);
+    }
+
 
     private void tweet(TweetReq tweetRequest)
     {
-        // check the database for this request and then send response to the client
+        handleResponse(service.tweet(tweetRequest) , tweetRequest);
     }
 
     private void retweet(RetweetReq tweetRequest)
     {
-        // check the database for this request and then send response to the client
+        handleResponse(service.retweet(tweetRequest) , tweetRequest);
     }
 
     private void quote(QuoteReq tweetRequest)
     {
-        // check the database for this request and then send response to the client
+        handleResponse(service.quote(tweetRequest) , tweetRequest);
     }
 
     private void reply(ReplyReq tweetRequest)
     {
-        // check the database for this request and then send response to the client
+        handleResponse(service.reply(tweetRequest) , tweetRequest);
+    }
+
+
+    private void handleResponse(Response response , TweetRequest request)
+    {
+        sendResponse(response);
+    }
+
+    private void sendResponse(Response response)
+    {
+        try {
+            sender.sendResponse(response);
+        } catch (UserThreadNotFoundException e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 }

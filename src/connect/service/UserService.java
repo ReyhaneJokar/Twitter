@@ -5,10 +5,8 @@ import model.Response;
 import model.exception.ConfigNotFoundException;
 import model.exception.UserNotFoundException;
 import model.request.user.*;
-import model.response.GetFollowersListRes;
-import model.response.GetFollowingListRes;
-import model.response.GetSearchResultRes;
-import model.response.GetUserProfileRes;
+import model.response.*;
+import model.tweet.Tweet;
 import model.user.User;
 
 import java.io.*;
@@ -112,6 +110,8 @@ public class UserService {
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
                     readUser.getProfile().setBio(request.getBio());
+                    readUser.getProfile().setLocation(request.getLocation());
+                    readUser.getProfile().setWebsite(request.getWebsite());
                 }
                 allUsers.add(readUser);
             }
@@ -233,8 +233,39 @@ public class UserService {
 
     public Response show_timeline(TimelineReq request)
     {
-        // TODO implement here
-        return null;
+        ArrayList<Tweet> tweets = new ArrayList<>();
+
+        ArrayList<User> following = new ArrayList<>();
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)){
+            while (true){
+                User readUser = (User) in.readObject();
+                if (readUser.getId().equals(request.getSenderId())){
+                    following = readUser.getFollowing();
+                    break;
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            return new Response(request.getSenderId(), false , e.getMessage());
+        }
+
+
+        for (User user : following) {
+            tweets.addAll(user.getTweets());
+        }
+
+        for (int i = 0; i < tweets.size()-1; i++) {
+            for (int j = 0; j < tweets.size(); j++) {
+                if (tweets.get(i).getDate().after(tweets.get(j).getDate())){
+                    Tweet temp = tweets.get(i);
+                    tweets.add(i , tweets.get(j));
+                    tweets.add(j , temp);
+                }
+            }
+        }
+
+        return new GetTimelineRes(request.getSenderId(), true , "time line of user sent" , tweets);
     }
 
 

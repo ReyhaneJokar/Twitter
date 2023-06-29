@@ -3,10 +3,7 @@ package connect.service;
 import model.Config;
 import model.Response;
 import model.exception.TweetNotFoundException;
-import model.request.tweet.QuoteReq;
-import model.request.tweet.ReplyReq;
-import model.request.tweet.RetweetReq;
-import model.request.tweet.TweetReq;
+import model.request.tweet.*;
 import model.tweet.Tweet;
 import model.user.User;
 
@@ -29,7 +26,7 @@ public class TweetService {
             while (fileInputStream.available() > 0){
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
-                    readUser.getTweets().add(new Tweet(request.getText() , request.getImage() , request.getDate()));
+                    readUser.getTweets().add(new Tweet(request.getText() , request.getImage() , request.getDate() , readUser));
                 }
                 allUsers.add(readUser);
             }
@@ -60,10 +57,61 @@ public class TweetService {
         return null;
     }
 
-    public Response reply(ReplyReq request){
+    public Response like(LikeTweetReq request){
+        ArrayList<User> allUsers = new ArrayList<>();
 
-        Tweet targetTweet = new Tweet(request.getText() , request.getImage() , request.getLikes() , request.getRetweets() , request.getDate() , request.getReplies());
-        Tweet replyTweet = new Tweet(request.getReplyText() , request.getReplyImage() , request.getReplyLikes() , request.getReplyRetweets() , request.getReplyDate() , request.getReplyReplies());
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)){
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if (readUser.getId().equals(request.getSenderId())){
+                    for (int i = 0; i < readUser.getTweets().size(); i++) {
+                        if (readUser.getTweets().get(i).getUuid().equals(request.getUuid())){
+                            readUser.getTweets().get(i).setLikes(readUser.getTweets().get(i).getLikes()+1);
+                            break;
+                        }
+                    }
+                }
+                allUsers.add(readUser);
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            return new Response(request.getSenderId(), false , e.getMessage());
+        }
+
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME()))) {
+            for (int i = 0; i < allUsers.size(); i++) {
+                out.writeObject(allUsers.get(i));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Response(request.getSenderId(), false , e.getMessage());
+        }
+        return new Response(request.getSenderId(), true , "Tweet liked successfully.");
+    }
+
+    public Response reply(ReplyReq request){
+        
+        User sender = null;
+        User target = null;
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)){
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if (readUser.getId().equals(request.getSenderId())){
+                    sender = readUser;
+                }
+                else if(readUser.getId().equals(request.getTargetId())){
+                    target = readUser;
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            return new Response(request.getSenderId(), false , e.getMessage());
+        }
+        
+        Tweet targetTweet = new Tweet(request.getText() , request.getImage() , request.getLikes() , request.getRetweets() , request.getDate() , request.getReplies() , target , request.getUuid());
+        Tweet replyTweet = new Tweet(request.getReplyText() , request.getReplyImage() , request.getReplyLikes() , request.getReplyRetweets() , request.getReplyDate() , request.getReplyReplies() , sender , request.getReplyuuid());
 
         ArrayList<User> allUsers = new ArrayList<>();
 

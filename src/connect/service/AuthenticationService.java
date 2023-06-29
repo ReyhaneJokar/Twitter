@@ -4,10 +4,12 @@ import model.Config;
 import model.Response;
 import model.request.Authentication.LogInReq;
 import model.request.Authentication.SignUpReq;
+import model.tweet.Tweet;
 import model.user.User;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AuthenticationService {
 
@@ -48,6 +50,13 @@ public class AuthenticationService {
         allUsers.add(user);
 
         //for test
+
+        Tweet tweet = new Tweet("hello " , null, new Date() , user);
+        user.getTweets().add(tweet);
+        Tweet tweet1 = new Tweet("bye " , null, new Date() , user);
+        user.getTweets().add(tweet);
+
+
 //        User user2 = new User("curlyrey" , "reyhan" , "jokar" , "rey@gmail.com" , null , "jkR138237" , "Iran" , null);
 //        user.getFollowers().add(user2);
 //        user2.getFollowing().add(user);

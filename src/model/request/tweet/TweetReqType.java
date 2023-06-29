@@ -2,6 +2,6 @@ package model.request.tweet;
 
 public enum TweetReqType {
 
-    TWEET , RETWEET , QUOTE , REPLY
+    TWEET , RETWEET , QUOTE , REPLY , LIKE
 
 }

@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Circle?>
 
-<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.resources.HomeController">
+<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.resources.HomeController">
    <children>
       <GridPane hgap="8.0" layoutX="-2.0" layoutY="549.0" prefWidth="500.0">
         <columnConstraints>
@@ -44,6 +50,19 @@
          </padding>
       </GridPane>
       <Separator layoutX="-2.0" layoutY="549.0" prefHeight="3.0" prefWidth="500.0" />
-      <Label fx:id="errorLabel" layoutX="125.0" layoutY="120.0" prefHeight="46.0" prefWidth="263.0" textFill="#e20909" />
+      <Circle fx:id="profilePicCircle" fill="#fffcfc" layoutX="35.0" layoutY="28.0" radius="21.0" stroke="GREY" strokeType="INSIDE" />
+      <Separator layoutY="56.0" prefWidth="500.0" />
+      <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="57.0" pannable="true" prefHeight="492.0" prefWidth="500.0" vbarPolicy="ALWAYS">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="486.0">
+               <children>
+                  <ImageView fx:id="addTweetImageview" accessibleRole="BUTTON" fitHeight="42.0" fitWidth="42.0" layoutX="14.0" layoutY="434.0" onMouseClicked="#addTweetImageviewPressed" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../pic/add-tweet.png" />
+                     </image>
+                  </ImageView>
+               </children></AnchorPane>
+        </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

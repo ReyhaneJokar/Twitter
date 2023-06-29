@@ -1,35 +1,62 @@
 package model.tweet;
 
-import javafx.scene.image.Image;
+import model.user.User;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 public class Tweet implements Serializable {
+    private UUID uuid;
     private String text;
-    private Image image;
-    private int likes, retweets;
+    private byte[] image;
+    private int likes, retweets; //number of quotes and retweets are shown together
     private Date date;
     private ArrayList<Tweet> replies;
+    private User user ;
 
-    public Tweet(String text, Image image, Date date) {
+    public Tweet(String text, byte[] image, Date date , User user) {
+        this.uuid = UUID.randomUUID();
         this.text = text;
         this.image = image;
         this.date = date;
+        this.user = user;
         this.likes = 0;
         this.retweets = 0;
         this.replies = new ArrayList<>();
     }
 
-    public Tweet(String text, Image image, int likes, int retweets, Date date, ArrayList<Tweet> replies) {
+    public Tweet(String text, byte[] image, int likes, int retweets, Date date, ArrayList<Tweet> replies , User user , UUID uuid) {
+        this.uuid = uuid;
         this.text = text;
         this.image = image;
         this.likes = likes;
         this.retweets = retweets;
         this.date = date;
         this.replies = replies;
+        this.user = user;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public int getLikes() {

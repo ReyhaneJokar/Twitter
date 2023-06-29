@@ -1,19 +1,23 @@
 package client.resources;
 
+import client.resources.cell.TweetCell;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import model.exception.ResponseNotFoundException;
 import model.request.user.MyProfileReq;
 import model.response.GetUserProfileRes;
+import model.tweet.Tweet;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -73,6 +77,13 @@ public class ProfileController extends Controller implements Initializable {
     @FXML
     private Circle profileCircle;
 
+    @FXML
+    private ScrollPane scrollPane;
+
+    private VBox tweetContent;
+
+
+
 
     @FXML
     void chatImageviewPressed(MouseEvent event) {
@@ -112,6 +123,11 @@ public class ProfileController extends Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        tweetContent = new VBox();
+        scrollPane.setContent(tweetContent);
+        tweetContent.setSpacing(10);
+        tweetContent.setStyle("-fx-background-color:white;" + "-fx-padding: 8;");
+
         try {
             clientThread.send(new MyProfileReq(clientThread.getId()));
 
@@ -143,9 +159,16 @@ public class ProfileController extends Controller implements Initializable {
                 InputStream inputStream = new ByteArrayInputStream(response.getProfile().getAvatar());
                 profileCircle.setFill(new ImagePattern(new Image(inputStream)));
             }
+
+            for (Tweet tweet : response.getTweets()) {
+                TweetCell tweetCell = new TweetCell(tweet);
+                tweetContent.getChildren().add(tweetCell);
+            }
+
         } catch(ResponseNotFoundException e) {
             //closeScene();
         }
+
 
     }
 

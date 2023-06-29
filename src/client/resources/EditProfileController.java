@@ -52,9 +52,6 @@ public class EditProfileController extends Controller implements Initializable {
     private Label idLabel;
 
     @FXML
-    private Label locationLabel;
-
-    @FXML
     private Label nameLabel;
 
     @FXML
@@ -63,11 +60,14 @@ public class EditProfileController extends Controller implements Initializable {
     @FXML
     private TextField websiteTextfield;
 
+    @FXML
+    private TextField locationTextfield;
+
     final FileChooser fileChooser = new FileChooser();
 
     @FXML
     void doneButtonPressed(ActionEvent event) {
-        clientThread.send(new BioReq(clientThread.getId() , bioTextfield.getText() , websiteTextfield.getText()));
+        clientThread.send(new BioReq(clientThread.getId() , bioTextfield.getText() , websiteTextfield.getText() , locationTextfield.getText()));
         try {
             Response response = clientThread.getReceiver().getResponse();
             if (!response.isAccepted()){
@@ -125,8 +125,6 @@ public class EditProfileController extends Controller implements Initializable {
             Image image = new Image(file.toURI().toString());
             profileCircle.setFill(new ImagePattern(image));
 
-
-
             try {
                 BufferedImage bufferedImage = ImageIO.read(file);
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -182,7 +180,7 @@ public class EditProfileController extends Controller implements Initializable {
             idLabel.setText("@" + response.getId());
             nameLabel.setText(response.getName());
             bioTextfield.setText(response.getProfile().getBio());
-            locationLabel.setText(response.getProfile().getLocation());
+            locationTextfield.setText(response.getProfile().getLocation());
             if (response.getProfile().getWebsite() != null){
                 websiteTextfield.setText(response.getProfile().getWebsite());
             }
