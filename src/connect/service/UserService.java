@@ -29,7 +29,7 @@ public class UserService {
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
                     flag = true;
-                    return new GetUserProfileRes(request.getSenderId(), true , "profile sent" , readUser.getId() , readUser.getName(), readUser.getCountry() , readUser.getJoinDate(), readUser.getProfile(), readUser.getFollowers() , readUser.getFollowing() , readUser.getTweets());
+                    return new GetUserProfileRes(request.getSenderId(), true , "profile sent" , readUser.getId() , readUser.getName(), readUser.getCountry() , readUser.getJoinDate(), readUser.getProfile(), readUser.getFollowers() , readUser.getFollowing() , readUser.getTweets(), readUser.getBlackList());
                 }
             }
             if (!flag){
@@ -38,7 +38,7 @@ public class UserService {
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }catch (UserNotFoundException e){
-            return new GetUserProfileRes(request.getSenderId() , false , "User not found." , null , null , null , null , null , null , null , null);
+            return new GetUserProfileRes(request.getSenderId() , false , "User not found." , null , null , null , null , null , null , null , null, null);
         }
         return null;
     }
@@ -238,13 +238,33 @@ public class UserService {
 
         ArrayList<User> following = new ArrayList<>();
 
+        User senderUser = null;
+
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
-            while (true){
+            while (true) {
                 User readUser = (User) in.readObject();
-                if (readUser.getId().equals(request.getSenderId())){
+                if (readUser.getId().equals(request.getSenderId())) {
+                    senderUser = readUser;
                     following = readUser.getFollowing();
                     break;
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            return new Response(request.getSenderId(), false , e.getMessage());
+        }
+
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)){
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if ((!readUser.getId().equals(request.getSenderId())) && (!senderUser.getBlackList().contains(readUser))){
+                    for (int i = 0; i < readUser.getTweets().size(); i++) {
+                        if (readUser.getTweets().get(i).getLikes() >= 10){
+                            tweets.add(readUser.getTweets().get(i));
+                        }
+                    }
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -294,6 +314,8 @@ public class UserService {
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
                     readUser.getBlackList().add(targetUser);
+                    readUser.getFollowing().remove(targetUser);
+                    readUser.getFollowers().remove(targetUser);
                 }
                 allUsers.add(readUser);
             }
@@ -440,6 +462,13 @@ public class UserService {
         } catch (UserNotFoundException e) {
             return new GetSearchResultRes(request.getSenderId(), false , "sender user not found" , resultUsers , null);
         }
+
+        for (User user: resultUsers) {
+            if (senderUser.getBlackList().contains(user)){
+                resultUsers.remove(user);
+            }
+        }
+
         return new GetSearchResultRes(request.getSenderId(), true , "result of search sent" , resultUsers , senderUser);
     }
 
@@ -469,5 +498,29 @@ public class UserService {
             return new GetTweetInfoRes(request.getSenderId(), false , "sender user not found" , null);
         }
         return new GetTweetInfoRes(request.getSenderId(), true , "tweet sent" , tweet);
+    }
+
+    public Response get_userProfile(UserProfileReq request){
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
+            boolean flag = false;
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                for (Tweet tweet: readUser.getTweets()) {
+                    if (tweet.getUuid().equals(request.getTweetUUID()) && tweet.getUser().getId().equals(readUser.getId())){
+                        return new GetUserProfileRes(request.getSenderId(), true , "profile sent" , readUser.getId() , readUser.getName(), readUser.getCountry() , readUser.getJoinDate(), readUser.getProfile(), readUser.getFollowers() , readUser.getFollowing() , readUser.getTweets(), readUser.getBlackList());
+                    }
+                }
+            }
+            if (!flag){
+                throw new UserNotFoundException();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }catch (UserNotFoundException e){
+            return new GetUserProfileRes(request.getSenderId() , false , "User not found." , null , null , null , null , null , null , null , null, null);
+        }
+        return null;
     }
 }

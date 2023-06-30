@@ -14,8 +14,9 @@ public class GetUserProfileRes extends GetInfoResponse{
     private final ArrayList<User> followers;
     private final ArrayList<User> following;
     private final ArrayList<Tweet> tweets;
+    private final ArrayList<User> blackList;
 
-    public GetUserProfileRes(String receiverId, boolean isAccepted, String message, String id, String name, String country, Date date ,  Profile profile, ArrayList<User> followers, ArrayList<User> following, ArrayList<Tweet> tweets) {
+    public GetUserProfileRes(String receiverId, boolean isAccepted, String message, String id, String name, String country, Date date, Profile profile, ArrayList<User> followers, ArrayList<User> following, ArrayList<Tweet> tweets, ArrayList<User> blackList) {
         super(receiverId, isAccepted, message);
         this.id = id;
         this.name = name;
@@ -25,6 +26,7 @@ public class GetUserProfileRes extends GetInfoResponse{
         this.followers = followers;
         this.following = following;
         this.tweets = tweets;
+        this.blackList = blackList;
     }
 
     public String getId() {
@@ -57,5 +59,9 @@ public class GetUserProfileRes extends GetInfoResponse{
 
     public ArrayList<Tweet> getTweets() {
         return tweets;
+    }
+
+    public ArrayList<User> getBlackList() {
+        return blackList;
     }
 }

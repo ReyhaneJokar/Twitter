@@ -66,7 +66,7 @@ public class QuoteTweetController extends Controller implements Initializable {
     void doneImageviewPressed(MouseEvent event) {
 
         try {
-            clientThread.send(new QuoteReq(clientThread.getId(), tweet.getUuid() , tweet.getText() , tweet.getImage() , tweet.getLikes() , tweet.getRetweets() , tweet.getDate() , tweet.getReplies() , quoteTextfield.getText() , null));
+            clientThread.send(new QuoteReq(clientThread.getId(), tweet.getUuid() , tweet.getText() , tweet.getImage() , tweet.getLikes() , tweet.getRetweets() , tweet.getDate() , tweet.getReplies() , quoteTextfield.getText() , tweet.getUser()));
 
             Response response =  clientThread.getReceiver().getResponse();
 

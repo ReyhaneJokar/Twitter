@@ -88,6 +88,44 @@ public class TweetService {
 
         //create a quote tweet with new uuid
         //find the user and set it
+
+        ArrayList<User> allUsers = new ArrayList<>();
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)){
+            boolean flag = false;
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if (readUser.getId().equals(request.getUser().getId())){
+                    for (int i = 0; i < readUser.getTweets().size(); i++) {
+                        if (readUser.getTweets().get(i).getUuid().equals(request.getUuid())){
+                            readUser.getTweets().get(i).setRetweets(readUser.getTweets().get(i).getRetweets()+1);
+                            flag = true;
+                            break;
+                        }
+                    }
+                }
+                allUsers.add(readUser);
+            }
+            if (!flag){
+                throw new TweetNotFoundException();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            return new Response(request.getSenderId(), false , e.getMessage());
+        } catch (TweetNotFoundException e) {
+            return new Response(request.getSenderId(), false , "tweet not found");
+        }
+
+        try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME()))) {
+            for (int i = 0; i < allUsers.size(); i++) {
+                out.writeObject(allUsers.get(i));
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return new Response(request.getSenderId(), false , e.getMessage());
+        }
+
         return new Response(request.getSenderId() , true , "Tweet quoted successfully");
     }
 

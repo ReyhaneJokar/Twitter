@@ -62,11 +62,18 @@ public class UserApi {
             case TWEET_INFO:
                 tweet_info((TweetInfoReq) request);
                 break;
+            case USER_PROFILE:
+                get_userProfile((UserProfileReq) request);
+                break;
             default:
                 throw new InvalidTypeException();
         }
     }
 
+
+    private void get_userProfile(UserProfileReq request){
+        sendResponse(service.get_userProfile(request));
+    }
 
     private void tweet_info(TweetInfoReq request){
         sendResponse(service.get_Tweet_Info(request));

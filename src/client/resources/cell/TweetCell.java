@@ -30,53 +30,53 @@ import java.util.Date;
 
 public class TweetCell extends AnchorPane {
 
-    private ClientThread clientThread;
+    private final ClientThread clientThread;
 
-    private Circle circleClipProfile;
-    private Label userNameLabel;
-    private Label userIdLabel;
+    private final Circle circleClipProfile;
+    private final Button userNameLabel;
+    private final Label userIdLabel;
 
-    private TextArea textArea;
-    private ImageView tweetImage;
+    private final TextArea textArea;
+    private final ImageView tweetImage;
     private Rectangle tweetRectangle;
 
-    private Label dateLabel;
-    private Label typeOfAppLabel;
+    private final Label dateLabel;
+    private final Label typeOfAppLabel;
     private Label countOfRetweet;
-    private Label retweetLabel;
+    private final Label retweetLabel;
     private Label countOfLikes;
-    private Label likeLabel;
+    private final Label likeLabel;
     private Label countOfReply;
-    private Label replyLabel;
-    private Label userRetweetedLabel;
+    private final Label replyLabel;
+    private final Label userRetweetedLabel;
 
-    private Separator separator1;
-    private Separator separator2;
+    private final Separator separator1;
+    private final Separator separator2;
 
-    private Button quoteButton;
-    private Button retweetButton;
-    private Button likeButton;
+    private final Button quoteButton;
+    private final Button retweetButton;
+    private final Button likeButton;
 
-    private Tweet tweet;
+    private final Tweet tweet;
 
 
-    private static Image redHeartImage = new Image(FxClient.class.getResource("pic/heart_red.png").toExternalForm());
-    private static Image grayHeartImage = new Image(FxClient.class.getResource("pic/heart_gray.png").toExternalForm());
-    private static Image quoteImage = new Image(FxClient.class.getResource("pic/quote.png").toExternalForm());
-    private static Image retImage = new Image(FxClient.class.getResource("pic/retweet.png").toExternalForm());
-    private static Image blueretweetImage = new Image(FxClient.class.getResource("pic/blueretweet.jpg").toExternalForm());
+    private static final Image redHeartImage = new Image(FxClient.class.getResource("pic/heart_red.png").toExternalForm());
+    private static final Image grayHeartImage = new Image(FxClient.class.getResource("pic/heart_gray.png").toExternalForm());
+    private static final Image quoteImage = new Image(FxClient.class.getResource("pic/quote.png").toExternalForm());
+    private static final Image retImage = new Image(FxClient.class.getResource("pic/retweet.png").toExternalForm());
+    private static final Image blueretweetImage = new Image(FxClient.class.getResource("pic/blueretweet.jpg").toExternalForm());
 
-    private ImageView redHeartImageView = new ImageView(redHeartImage);
-    private ImageView grayHeartImageView = new ImageView(grayHeartImage);
-    private ImageView quoteImageView = new ImageView(quoteImage);
-    private ImageView retImageView = new ImageView(retImage);
-    private ImageView blue_retImageView = new ImageView(blueretweetImage);
+    private final ImageView redHeartImageView = new ImageView(redHeartImage);
+    private final ImageView grayHeartImageView = new ImageView(grayHeartImage);
+    private final ImageView quoteImageView = new ImageView(quoteImage);
+    private final ImageView retImageView = new ImageView(retImage);
+    private final ImageView blue_retImageView = new ImageView(blueretweetImage);
 
     public TweetCell(Tweet tweet) {
         this.clientThread = ClientThread.getClientThread();
 
         this.tweet = tweet;
-        userNameLabel = new Label(tweet.getUser().getName());
+        userNameLabel = new Button(tweet.getUser().getName());
         userIdLabel = new Label("@" + tweet.getUser().getId());
         circleClipProfile = new Circle(20);
         if (tweet.getUser().getProfile().getAvatar() != null) {
@@ -136,9 +136,12 @@ public class TweetCell extends AnchorPane {
 
         userNameLabel.setFont(Font.font("Arial Rounded MT Bold", FontWeight.BOLD, 21));
         userNameLabel.setStyle("-fx-text-fill:black;");
+        userNameLabel.setStyle("-fx-background-color:white;" +"-fx-border-color:white");
+
 
         userIdLabel.setFont(Font.font("Roboto", FontWeight.NORMAL, 14));
-        //userIdLabel.setStyle("-fx-text-fill:gray;");
+        userIdLabel.setStyle("-fx-text-fill:gray;");
+
 
         textArea.setStyle("-fx-background-color:#242424;" +
                 "-fx-text-fill:black;");
@@ -186,7 +189,7 @@ public class TweetCell extends AnchorPane {
         replyLabel.setFont(Font.font("Roboto", FontWeight.NORMAL, 13));
         replyLabel.setStyle("-fx-text-fill:gray;");
 
-        userRetweetedLabel.setStyle("-fx-text-fill:red;");
+        userRetweetedLabel.setStyle("-fx-text-fill:#0da5f3;");
 
 
         retImageView.setFitWidth(20);
@@ -219,17 +222,14 @@ public class TweetCell extends AnchorPane {
         AnchorPane.setTopAnchor(circleClipProfile, 10.0);
         AnchorPane.setLeftAnchor(circleClipProfile, 10.0);
 
-        AnchorPane.setTopAnchor(userNameLabel, 11.0);
-        AnchorPane.setLeftAnchor(userNameLabel, 65.0);
+        AnchorPane.setTopAnchor(userNameLabel, 10.0);
+        AnchorPane.setLeftAnchor(userNameLabel, 54.0);
 
         AnchorPane.setTopAnchor(userIdLabel, 39.0);
         AnchorPane.setLeftAnchor(userIdLabel, 65.0);
 
-        //
         AnchorPane.setTopAnchor(userRetweetedLabel, 11.0);
         AnchorPane.setRightAnchor(userRetweetedLabel, 11.0);
-
-        //
 
         AnchorPane.setTopAnchor(textArea, 60.0);
         AnchorPane.setLeftAnchor(textArea, 10.0);
@@ -238,7 +238,9 @@ public class TweetCell extends AnchorPane {
         AnchorPane.setLeftAnchor(tweetImage, 10.0);
 
         AnchorPane.setTopAnchor(dateLabel, 310.0);
-        AnchorPane.setLeftAnchor(dateLabel, 30.0);
+//        AnchorPane.setLeftAnchor(dateLabel, 30.0);
+        AnchorPane.setLeftAnchor(dateLabel, 75.0);
+
         AnchorPane.setTopAnchor(typeOfAppLabel, 310.0);
         AnchorPane.setLeftAnchor(typeOfAppLabel, 250.0);
 
@@ -331,8 +333,16 @@ public class TweetCell extends AnchorPane {
                 e.printStackTrace();
             }
         });
+
+        userNameLabel.setOnAction(actionEvent -> {
+            this.clientThread.setUuid(this.tweet.getUuid());
+
+            Controller.changeView("otherUsersProfile" , actionEvent);
+
+        });
+
     }
-    
+
 
     public static String calculateDateDifference(Date myDate) {
         long currentTime = System.currentTimeMillis();
