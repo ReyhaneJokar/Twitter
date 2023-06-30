@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.UUID;
 
 /**
  * A singleton class
@@ -19,6 +20,8 @@ public class ClientThread implements Runnable{
     private final ClientReceiver receiver;
     //client id
     private String id;
+    //tweet id for quote and reply
+    private UUID uuid;
     //socket between client and server
     private final Socket socket;
     private final ObjectInputStream inputStream;
@@ -78,5 +81,13 @@ public class ClientThread implements Runnable{
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 }

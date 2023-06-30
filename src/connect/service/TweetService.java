@@ -86,7 +86,9 @@ public class TweetService {
 
     public Response quote(QuoteReq request){
 
-        return null;
+        //create a quote tweet with new uuid
+        //find the user and set it
+        return new Response(request.getSenderId() , true , "Tweet quoted successfully");
     }
 
     public Response like(LikeTweetReq request){

@@ -17,7 +17,6 @@ import model.request.user.MyProfileReq;
 import model.response.GetUserProfileRes;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.URL;
@@ -32,6 +31,9 @@ public class AddTweetController extends Controller implements Initializable {
 
     @FXML
     private ImageView doneImageview;
+
+    @FXML
+    private Label addPhotoLabel;
 
     @FXML
     private Label idLabel;
@@ -51,7 +53,8 @@ public class AddTweetController extends Controller implements Initializable {
     @FXML
     private TextArea tweetTextfield;
 
-    final FileChooser fileChooser = new FileChooser();
+    private final FileChooser fileChooser = new FileChooser();
+    private File tweetImage;
 
 
     @FXML
@@ -61,17 +64,18 @@ public class AddTweetController extends Controller implements Initializable {
 
     @FXML
     void tweetImageviewPressed(MouseEvent event) {
+        addPhotoLabel.setVisible(false);
         fileChooser.setTitle("Choose a picture");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         fileChooser.getExtensionFilters().clear();
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files" , "*.png" , "*.jpg" , "*gif"));
 
-        File file = fileChooser.showOpenDialog(null);
+        tweetImage = fileChooser.showOpenDialog(null);
 
 
-        if (file != null){
-            tweetImageview.setImage(new Image(file.toURI().toString()));
+        if (tweetImage != null){
+            tweetImageview.setImage(new Image(tweetImage.toURI().toString()));
         }
         else {
             errorLabel.setText("Invalid file.");
@@ -83,8 +87,8 @@ public class AddTweetController extends Controller implements Initializable {
     void doneImageviewPressed(MouseEvent event) {
 
         try {
-            if (tweetImageview.getImage() != null){
-                BufferedImage bufferedImage = ImageIO.read((ImageInputStream) tweetImageview.getImage());
+            if (tweetImage != null){
+                BufferedImage bufferedImage = ImageIO.read(tweetImage);
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                 ImageIO.write(bufferedImage, "jpg", outputStream);
 

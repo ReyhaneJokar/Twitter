@@ -1,17 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 
-<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.resources.HomeController">
+<AnchorPane prefHeight="600.0" prefWidth="500.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.resources.HomeController">
    <children>
       <GridPane hgap="8.0" layoutX="-2.0" layoutY="549.0" prefWidth="500.0">
         <columnConstraints>
@@ -54,15 +49,13 @@
       <Separator layoutY="56.0" prefWidth="500.0" />
       <ScrollPane fx:id="scrollPane" hbarPolicy="NEVER" layoutY="57.0" pannable="true" prefHeight="492.0" prefWidth="500.0" vbarPolicy="ALWAYS">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="486.0">
-               <children>
-                  <ImageView fx:id="addTweetImageview" accessibleRole="BUTTON" fitHeight="42.0" fitWidth="42.0" layoutX="14.0" layoutY="434.0" onMouseClicked="#addTweetImageviewPressed" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../pic/add-tweet.png" />
-                     </image>
-                  </ImageView>
-               </children></AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="490.0" prefWidth="486.0" />
         </content>
       </ScrollPane>
+      <ImageView fx:id="addTweetImageview" accessibleRole="BUTTON" fitHeight="42.0" fitWidth="42.0" layoutX="444.0" layoutY="7.0" onMouseClicked="#addTweetImageviewPressed" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../pic/add-tweet.png" />
+         </image>
+      </ImageView>
    </children>
 </AnchorPane>

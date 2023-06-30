@@ -3,6 +3,7 @@ package connect.service;
 import model.Config;
 import model.Response;
 import model.exception.ConfigNotFoundException;
+import model.exception.TweetNotFoundException;
 import model.exception.UserNotFoundException;
 import model.request.user.*;
 import model.response.*;
@@ -440,5 +441,33 @@ public class UserService {
             return new GetSearchResultRes(request.getSenderId(), false , "sender user not found" , resultUsers , null);
         }
         return new GetSearchResultRes(request.getSenderId(), true , "result of search sent" , resultUsers , senderUser);
+    }
+
+
+    public Response get_Tweet_Info(TweetInfoReq request){
+        Tweet tweet = null;
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
+            boolean flag = false;
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                for (int i = 0; i < readUser.getTweets().size(); i++) {
+                    if (readUser.getTweets().get(i).getUuid().equals(request.getUuid())){
+                        tweet = readUser.getTweets().get(i);
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            if (!flag){
+                throw new TweetNotFoundException();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException();
+        }  catch (TweetNotFoundException e) {
+            return new GetTweetInfoRes(request.getSenderId(), false , "sender user not found" , null);
+        }
+        return new GetTweetInfoRes(request.getSenderId(), true , "tweet sent" , tweet);
     }
 }

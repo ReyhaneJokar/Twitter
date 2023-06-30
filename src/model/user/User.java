@@ -6,6 +6,7 @@ import model.tweet.Tweet;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 
 public class User implements Serializable {
@@ -97,6 +98,23 @@ public class User implements Serializable {
 
     public ArrayList<Tweet> getTimeline() {
         return timeline;
+    }
+
+    public String getBirthdate() {
+        return birthdate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getName(), user.getName()) && Objects.equals(getLastname(), user.getLastname()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getPhone(), user.getPhone()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getCountry(), user.getCountry()) && Objects.equals(getBirthdate(), user.getBirthdate()) && Objects.equals(getProfile(), user.getProfile()) && Objects.equals(getJoinDate(), user.getJoinDate()) && Objects.equals(getFollowers(), user.getFollowers()) && Objects.equals(getFollowing(), user.getFollowing()) && Objects.equals(getTweets(), user.getTweets()) && Objects.equals(getBlackList(), user.getBlackList()) && Objects.equals(getTimeline(), user.getTimeline());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getLastname(), getEmail(), getPhone(), getPassword(), getCountry(), getBirthdate(), getProfile(), getJoinDate(), getFollowers(), getFollowing(), getTweets(), getBlackList(), getTimeline());
     }
 }
 

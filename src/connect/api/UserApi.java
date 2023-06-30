@@ -59,11 +59,18 @@ public class UserApi {
             case SEARCH:
                 search((SearchReq) request);
                 break;
+            case TWEET_INFO:
+                tweet_info((TweetInfoReq) request);
+                break;
             default:
                 throw new InvalidTypeException();
         }
     }
 
+
+    private void tweet_info(TweetInfoReq request){
+        sendResponse(service.get_Tweet_Info(request));
+    }
 
     private void search(SearchReq request){
         sendResponse(service.search(request));

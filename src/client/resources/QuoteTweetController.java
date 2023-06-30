@@ -9,9 +9,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import model.Response;
 import model.exception.ResponseNotFoundException;
+import model.request.tweet.QuoteReq;
 import model.request.user.MyProfileReq;
+import model.request.user.TweetInfoReq;
+import model.response.GetTweetInfoRes;
 import model.response.GetUserProfileRes;
+import model.tweet.Tweet;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
@@ -50,6 +55,8 @@ public class QuoteTweetController extends Controller implements Initializable {
     @FXML
     private TextArea targetTweetTextfield;
 
+    private Tweet tweet;
+
     @FXML
     void backImageview(MouseEvent event) {
         changeView("home", event);
@@ -57,6 +64,19 @@ public class QuoteTweetController extends Controller implements Initializable {
 
     @FXML
     void doneImageviewPressed(MouseEvent event) {
+
+        try {
+            clientThread.send(new QuoteReq(clientThread.getId(), tweet.getUuid() , tweet.getText() , tweet.getImage() , tweet.getLikes() , tweet.getRetweets() , tweet.getDate() , tweet.getReplies() , quoteTextfield.getText() , null));
+
+            Response response =  clientThread.getReceiver().getResponse();
+
+            if (response.isAccepted()){
+                changeView("home" , event);
+            }
+        }catch (ResponseNotFoundException e){
+            //closeScene();
+        }
+
 
     }
 
@@ -80,6 +100,20 @@ public class QuoteTweetController extends Controller implements Initializable {
                 InputStream inputStream = new ByteArrayInputStream(response.getProfile().getAvatar());
                 profileCircle.setFill(new ImagePattern(new Image(inputStream)));
             }
+
+            clientThread.send(new TweetInfoReq(clientThread.getId(), clientThread.getUuid()));
+
+            GetTweetInfoRes quoteResponse = (GetTweetInfoRes) clientThread.getReceiver().getResponse();
+            tweet = quoteResponse.getTweet();
+
+            if(!response.isAccepted())
+            {
+                //closeScene();
+            }
+
+            targetNameLabel.setText(tweet.getUser().getName());
+            targetIdLabel.setText("@" + tweet.getUser().getId());
+            targetTweetTextfield.setText(tweet.getText());
 
         } catch(ResponseNotFoundException e) {
             //closeScene();

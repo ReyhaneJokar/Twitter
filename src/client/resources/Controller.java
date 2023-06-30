@@ -13,12 +13,12 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class Controller {
-    protected final ClientThread clientThread = ClientThread.getClientThread();
+    protected static final ClientThread clientThread = ClientThread.getClientThread();
 
-    public FXMLLoader changeView(String newView, ActionEvent event){
+    public static FXMLLoader changeView(String newView, ActionEvent event){
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("fxml/" + newView + ".fxml"));
+            loader.setLocation(Controller.class.getResource("fxml/" + newView + ".fxml"));
 
             clientThread.getReceiver().setLoader(loader);
             Parent homeParent = loader.load();

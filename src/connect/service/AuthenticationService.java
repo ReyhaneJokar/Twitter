@@ -4,13 +4,10 @@ import model.Config;
 import model.Response;
 import model.request.Authentication.LogInReq;
 import model.request.Authentication.SignUpReq;
-import model.tweet.Tweet;
 import model.user.User;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.UUID;
 
 public class AuthenticationService {
 
@@ -52,10 +49,10 @@ public class AuthenticationService {
 
         //for test
 
-        Tweet tweet = new Tweet(UUID.randomUUID() , "hello " , null, new Date() , user);
-        user.getTweets().add(tweet);
-        Tweet tweet1 = new Tweet(UUID.randomUUID() , "bye " , null, new Date() , user);
-        user.getTweets().add(tweet);
+//        Tweet tweet = new Tweet(UUID.randomUUID() , "hello " , null, new Date() , user);
+//        user.getTweets().add(tweet);
+//        Tweet tweet1 = new Tweet(UUID.randomUUID() , "bye " , null, new Date() , user);
+//        user.getTweets().add(tweet);
 
 
 //        User user2 = new User("curlyrey" , "reyhan" , "jokar" , "rey@gmail.com" , null , "jkR138237" , "Iran" , null);
