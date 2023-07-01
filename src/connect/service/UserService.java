@@ -462,14 +462,54 @@ public class UserService {
         } catch (UserNotFoundException e) {
             return new GetSearchResultRes(request.getSenderId(), false , "sender user not found" , resultUsers , null);
         }
-
         for (User user: resultUsers) {
             if (senderUser.getBlackList().contains(user)){
                 resultUsers.remove(user);
             }
         }
-
         return new GetSearchResultRes(request.getSenderId(), true , "result of search sent" , resultUsers , senderUser);
+    }
+
+    public Response search_with_hashtag(SearchReq request){
+        ArrayList<Tweet> resultTweets = new ArrayList<>();
+
+        User senderUser = null;
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
+            boolean flag = false;
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if (readUser.getId().equals(request.getSenderId())){
+                    senderUser = readUser;
+                }
+            }
+            if (!flag){
+                throw new UserNotFoundException();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException();
+        } catch (UserNotFoundException e) {
+            return new GetHashtagSearchRes(request.getSenderId(), false , "sender user not found" , null);
+        }
+
+        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
+            ObjectInputStream in = new ObjectInputStream(fileInputStream)) {
+            while (fileInputStream.available() > 0){
+                User readUser = (User) in.readObject();
+                if ((!senderUser.getBlackList().contains(readUser)) && (!readUser.getBlackList().contains(senderUser))){
+                    for (int i = 0; i < readUser.getTweets().size(); i++) {
+                        if (readUser.getTweets().get(i).getText().contains(request.getSearchText())){
+                            resultTweets.add(readUser.getTweets().get(i));
+                        }
+                    }
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            throw new RuntimeException();
+        }
+        return new GetHashtagSearchRes(request.getSenderId(), true , "result of hashtag search sent" , resultTweets);
+
     }
 
 

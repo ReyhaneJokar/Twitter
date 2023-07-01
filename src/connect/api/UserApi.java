@@ -80,7 +80,12 @@ public class UserApi {
     }
 
     private void search(SearchReq request){
-        sendResponse(service.search(request));
+        if (request.getSearchText().startsWith("#")){
+            sendResponse(service.search_with_hashtag(request));
+        }
+        else {
+            sendResponse(service.search(request));
+        }
     }
 
     private void get_followers(FollowersListReq request){

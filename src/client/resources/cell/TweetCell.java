@@ -156,6 +156,7 @@ public class TweetCell extends AnchorPane {
         tweetRectangle.setArcHeight(20.0);
         tweetRectangle.setArcWidth(20.0);
         tweetImage.setClip(tweetRectangle);
+        tweetImage.setPreserveRatio(true);
 
         dateLabel.setFont(Font.font("Roboto", FontWeight.NORMAL, 11));
         dateLabel.setStyle("-fx-text-fill:gray");
@@ -224,7 +225,7 @@ public class TweetCell extends AnchorPane {
         AnchorPane.setTopAnchor(circleClipProfile, 10.0);
         AnchorPane.setLeftAnchor(circleClipProfile, 10.0);
 
-        AnchorPane.setTopAnchor(userNameLabel, 10.0);
+        AnchorPane.setTopAnchor(userNameLabel, 8.0);
         AnchorPane.setLeftAnchor(userNameLabel, 54.0);
 
         AnchorPane.setTopAnchor(userIdLabel, 39.0);
