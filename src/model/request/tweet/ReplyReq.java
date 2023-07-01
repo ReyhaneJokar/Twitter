@@ -11,19 +11,14 @@ public class ReplyReq extends TweetRequest {
     private final UUID replyuuid;
     private final String targetId;
     private final String replyText;
-    private final int replyLikes, replyRetweets;
     private final Date replyDate;
-    private final ArrayList<Tweet> replyReplies;
 
-    public ReplyReq(String senderId, UUID uuid, String text, byte[] image, int likes, int retweets, Date date, ArrayList<Tweet> replies , UUID replyuuid, String targetId , String replyText, int replyLikes, int replyRetweets, Date replyDate, ArrayList<Tweet> replyReplies, User user) {
+    public ReplyReq(String senderId, UUID uuid, String text, byte[] image, int likes, int retweets, Date date, ArrayList<Tweet> replies , UUID replyuuid, String targetId , String replyText,  Date replyDate, User user) {
         super(senderId, TweetReqType.REPLY , uuid, text, image, likes, retweets, date, replies , user);
         this.replyuuid = replyuuid;
         this.targetId = targetId;
         this.replyText = replyText;
-        this.replyLikes = replyLikes;
-        this.replyRetweets = replyRetweets;
         this.replyDate = replyDate;
-        this.replyReplies = replyReplies;
     }
 
     public UUID getReplyuuid() {
@@ -38,19 +33,7 @@ public class ReplyReq extends TweetRequest {
         return replyText;
     }
 
-    public int getReplyLikes() {
-        return replyLikes;
-    }
-
-    public int getReplyRetweets() {
-        return replyRetweets;
-    }
-
     public Date getReplyDate() {
         return replyDate;
-    }
-
-    public ArrayList<Tweet> getReplyReplies() {
-        return replyReplies;
     }
 }

@@ -47,7 +47,7 @@ public class TweetCell extends AnchorPane {
     private Label countOfLikes;
     private final Label likeLabel;
     private Label countOfReply;
-    private final Label replyLabel;
+    private final Button replyLabel;
     private final Label userRetweetedLabel;
 
     private final Separator separator1;
@@ -100,7 +100,7 @@ public class TweetCell extends AnchorPane {
         countOfLikes = new Label(tweet.getLikes() + "");
         likeLabel = new Label("Likes");
         countOfReply = new Label(tweet.getReplies().size() + "");
-        replyLabel = new Label("Replies");
+        replyLabel = new Button("Replies");
         quoteButton = new Button();
         retweetButton = new Button();
         likeButton = new Button();
@@ -188,6 +188,8 @@ public class TweetCell extends AnchorPane {
 
         replyLabel.setFont(Font.font("Roboto", FontWeight.NORMAL, 13));
         replyLabel.setStyle("-fx-text-fill:gray;");
+        replyLabel.setStyle("-fx-background-color:white;" +"-fx-border-color:white");
+
 
         userRetweetedLabel.setStyle("-fx-text-fill:#0da5f3;");
 
@@ -252,13 +254,13 @@ public class TweetCell extends AnchorPane {
         AnchorPane.setLeftAnchor(separator2, 0.0);
 
         AnchorPane.setTopAnchor(countOfRetweet, 342.0);
-        AnchorPane.setLeftAnchor(countOfRetweet, 75.0);
+        AnchorPane.setLeftAnchor(countOfRetweet, 70.0);
 
         AnchorPane.setTopAnchor(retweetLabel, 342.0);
         AnchorPane.setLeftAnchor(retweetLabel, 85.0);
 
         AnchorPane.setTopAnchor(countOfLikes, 342.0);
-        AnchorPane.setLeftAnchor(countOfLikes, 200.0);
+        AnchorPane.setLeftAnchor(countOfLikes, 195.0);
 
         AnchorPane.setTopAnchor(likeLabel, 342.0);
         AnchorPane.setLeftAnchor(likeLabel, 210.0);
@@ -267,7 +269,7 @@ public class TweetCell extends AnchorPane {
         AnchorPane.setTopAnchor(countOfReply, 342.0);
         AnchorPane.setLeftAnchor(countOfReply, 325.0);
 
-        AnchorPane.setTopAnchor(replyLabel, 342.0);
+        AnchorPane.setTopAnchor(replyLabel, 337.0);
         AnchorPane.setLeftAnchor(replyLabel, 335.0);
 
 
@@ -338,6 +340,13 @@ public class TweetCell extends AnchorPane {
             this.clientThread.setUuid(this.tweet.getUuid());
 
             Controller.changeView("otherUsersProfile" , actionEvent);
+
+        });
+
+        replyLabel.setOnAction(actionEvent -> {
+            this.clientThread.setUuid(this.tweet.getUuid());
+
+            Controller.changeView("replyTweet" , actionEvent);
 
         });
 
