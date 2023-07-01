@@ -95,10 +95,10 @@ public class SearchController extends Controller {
                     senderUser = response.getSenderUser();
 
                     if(!response.isAccepted()) {
-                        //closeScene();
+                        System.out.println(response.getMessage());
                     }
                 } catch (ResponseNotFoundException e) {
-                    //closeScene();
+                    e.printStackTrace();
                 }
 
                 if (result.size() == 0){

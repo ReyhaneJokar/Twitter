@@ -287,6 +287,8 @@ public class TweetCell extends AnchorPane {
     }
 
     private void setAction() {
+
+
         quoteButton.setOnAction(actionEvent -> {
 
             this.clientThread.setUuid(this.tweet.getUuid());
@@ -317,9 +319,10 @@ public class TweetCell extends AnchorPane {
             }
         });
 
+
         likeButton.setOnAction(actionEvent -> {
 
-            clientThread.send(new LikeTweetReq(clientThread.getId(), tweet.getUuid(), tweet.getText(), tweet.getImage(), tweet.getLikes(), tweet.getRetweets(), tweet.getDate(), tweet.getReplies(), null));
+            clientThread.send(new LikeTweetReq(clientThread.getId(), tweet.getUuid(), tweet.getText(), tweet.getImage(), tweet.getLikes(), tweet.getRetweets(), tweet.getDate(), tweet.getReplies(), tweet.getUser()));
 
             try {
                 Response response = clientThread.getReceiver().getResponse();
@@ -337,12 +340,14 @@ public class TweetCell extends AnchorPane {
             }
         });
 
+
         userNameLabel.setOnAction(actionEvent -> {
             this.clientThread.setUuid(this.tweet.getUuid());
 
             Controller.changeView("otherUsersProfile" , actionEvent);
 
         });
+
 
         replyLabel.setOnAction(actionEvent -> {
             this.clientThread.setUuid(this.tweet.getUuid());

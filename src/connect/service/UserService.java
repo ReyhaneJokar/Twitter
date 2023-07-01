@@ -236,7 +236,7 @@ public class UserService {
     {
         ArrayList<Tweet> tweets = new ArrayList<>();
 
-        ArrayList<User> following = new ArrayList<>();
+        ArrayList<User> following;
 
         User senderUser = null;
 
@@ -293,15 +293,18 @@ public class UserService {
     public Response block_user(BlockReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
-        User targetUser;
+        User targetUser = null;
+        User senderUser = null;
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
-            while (true){
+            while (fileInputStream.available() > 0){
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getTargetId())){
                     targetUser = readUser;
-                    break;
+                }
+                else if (readUser.getId().equals(request.getSenderId())){
+                    senderUser = readUser;
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -316,6 +319,10 @@ public class UserService {
                     readUser.getBlackList().add(targetUser);
                     readUser.getFollowing().remove(targetUser);
                     readUser.getFollowers().remove(targetUser);
+                }
+                else if (readUser.getId().equals(request.getTargetId())){
+                    readUser.getFollowers().remove(senderUser);
+                    readUser.getFollowing().remove(senderUser);
                 }
                 allUsers.add(readUser);
             }
@@ -446,7 +453,16 @@ public class UserService {
                 User readUser = (User) in.readObject();
                 if (readUser.getName().equalsIgnoreCase(request.getSearchText()) || readUser.getLastname().equalsIgnoreCase(request.getSearchText()) || readUser.getId().equals(request.getSearchText())){
                     if (!readUser.getId().equals(request.getSenderId())){
-                        resultUsers.add(readUser);
+                        boolean is_blocked = false;
+                        for (User user: readUser.getBlackList()) {
+                            if (user.getId().equals(request.getSenderId())){
+                                is_blocked = true;
+                                break;
+                            }
+                        }
+                        if (!is_blocked){
+                            resultUsers.add(readUser);
+                        }
                     }
                 }
                 if(readUser.getId().equals(request.getSenderId())){
@@ -482,6 +498,7 @@ public class UserService {
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
                     senderUser = readUser;
+                    flag = true;
                 }
             }
             if (!flag){

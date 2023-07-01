@@ -61,8 +61,8 @@ public class TweetService {
                 else if (readUser.getId().equals(request.getUser().getId())){
                     for (int i = 0; i < readUser.getTweets().size(); i++) {
                         if (readUser.getTweets().get(i).getUuid().equals(request.getUuid())){
-                            readUser.getTweets().get(i).setRetweets(readUser.getTweets().get(i).getRetweets()+1);
-                            break;
+                            int temp = readUser.getTweets().get(i).getRetweets() + 1;
+                            readUser.getTweets().get(i).setRetweets(temp);
                         }
                     }
                 }
@@ -99,9 +99,9 @@ public class TweetService {
                 if (readUser.getId().equals(request.getUser().getId())){
                     for (int i = 0; i < readUser.getTweets().size(); i++) {
                         if (readUser.getTweets().get(i).getUuid().equals(request.getUuid())){
-                            readUser.getTweets().get(i).setRetweets(readUser.getTweets().get(i).getRetweets()+1);
+                            int temp = readUser.getTweets().get(i).getRetweets() + 1;
+                            readUser.getTweets().get(i).setRetweets(temp);
                             flag = true;
-                            break;
                         }
                     }
                 }
@@ -136,11 +136,11 @@ public class TweetService {
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
             while (fileInputStream.available() > 0){
                 User readUser = (User) in.readObject();
-                if (readUser.getId().equals(request.getSenderId())){
+                if (readUser.getId().equals(request.getUser().getId())){
                     for (int i = 0; i < readUser.getTweets().size(); i++) {
                         if (readUser.getTweets().get(i).getUuid().equals(request.getUuid())){
-                            readUser.getTweets().get(i).setLikes(readUser.getTweets().get(i).getLikes()+1);
-                            break;
+                            int temp = readUser.getTweets().get(i).getLikes() + 1;
+                            readUser.getTweets().get(i).setLikes(temp);
                         }
                     }
                 }
@@ -197,7 +197,6 @@ public class TweetService {
                         if (readUser.getTweets().get(i).getUuid().equals(targetTweet.getUuid())){
                             readUser.getTweets().get(i).getReplies().add(replyTweet);
                             flag = true;
-                            break;
                         }
                     }
                 }

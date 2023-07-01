@@ -74,7 +74,7 @@ public class QuoteTweetController extends Controller implements Initializable {
                 changeView("home" , event);
             }
         }catch (ResponseNotFoundException e){
-            //closeScene();
+            e.printStackTrace();
         }
 
 
@@ -108,7 +108,7 @@ public class QuoteTweetController extends Controller implements Initializable {
 
             if(!response.isAccepted())
             {
-                //closeScene();
+                System.out.println(response.getMessage());
             }
 
             targetNameLabel.setText(tweet.getUser().getName());
@@ -116,7 +116,7 @@ public class QuoteTweetController extends Controller implements Initializable {
             targetTweetTextfield.setText(tweet.getText());
 
         } catch(ResponseNotFoundException e) {
-            //closeScene();
+            e.printStackTrace();
         }
     }
 }

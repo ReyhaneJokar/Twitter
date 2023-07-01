@@ -47,17 +47,6 @@ public class AuthenticationService {
         user.getProfile().setLocation(request.getCountry());
         allUsers.add(user);
 
-        //for test
-
-//        Tweet tweet = new Tweet(UUID.randomUUID() , "hello " , null, new Date() , user);
-//        user.getTweets().add(tweet);
-//        Tweet tweet1 = new Tweet(UUID.randomUUID() , "bye " , null, new Date() , user);
-//        user.getTweets().add(tweet);
-
-
-//        User user2 = new User("curlyrey" , "reyhan" , "jokar" , "rey@gmail.com" , null , "jkR138237" , "Iran" , null);
-//        user.getFollowers().add(user2);
-//        user2.getFollowing().add(user);
 
         try(ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(config.getFILE_NAME()))) {
             for (int i = 0; i < allUsers.size(); i++) {

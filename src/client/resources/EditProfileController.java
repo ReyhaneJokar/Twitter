@@ -172,9 +172,8 @@ public class EditProfileController extends Controller implements Initializable {
 
             GetUserProfileRes response = (GetUserProfileRes) clientThread.getReceiver().getResponse();
 
-            if(!response.isAccepted())
-            {
-                //closeScene();
+            if(!response.isAccepted()) {
+                System.out.println(response.getMessage());
             }
 
             idLabel.setText("@" + response.getId());
@@ -198,7 +197,7 @@ public class EditProfileController extends Controller implements Initializable {
             }
 
         } catch(ResponseNotFoundException e) {
-            //closeScene();
+            e.printStackTrace();
         }
     }
 }

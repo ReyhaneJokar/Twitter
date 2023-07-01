@@ -133,9 +133,8 @@ public class ProfileController extends Controller implements Initializable {
 
             GetUserProfileRes response = (GetUserProfileRes) clientThread.getReceiver().getResponse();
 
-            if(!response.isAccepted())
-            {
-                //closeScene();
+            if(!response.isAccepted()) {
+                System.out.println(response.getMessage());
             }
 
             idLabel.setText("@" + response.getId());
@@ -160,21 +159,17 @@ public class ProfileController extends Controller implements Initializable {
                 profileCircle.setFill(new ImagePattern(new Image(inputStream)));
             }
 
+
             for (Tweet tweet : response.getTweets()) {
                 TweetCell tweetCell = new TweetCell(tweet);
                 tweetContent.getChildren().add(tweetCell);
             }
 
         } catch(ResponseNotFoundException e) {
-            //closeScene();
+            e.printStackTrace();
         }
 
 
     }
 
-//    private void closeScene()
-//    {
-//        Stage stage = (Stage)pane.getScene().getWindow();
-//        stage.hide();
-//    }
 }

@@ -16,7 +16,6 @@ public class FxClient extends Application {
         ClientThread clientThread = ClientThread.getClientThread();
         Executors.newCachedThreadPool().execute(clientThread);
 
-        //Stage stage = new Stage();
         clientThread.getReceiver().setLoader(new FXMLLoader(FxClient.class.getResource("fxml/Login.fxml")));
         clientThread.getReceiver().setStage(stage);
         Scene scene = new Scene(clientThread.getReceiver().getLoader().load() , 500 , 600);

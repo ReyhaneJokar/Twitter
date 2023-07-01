@@ -83,7 +83,7 @@ public class HomeController extends Controller implements Initializable {
 
             if(!response.isAccepted())
             {
-                //closeScene();
+                System.out.println(response.getMessage());
             }
 
             if (response.getProfile().getAvatar() != null){
@@ -91,7 +91,7 @@ public class HomeController extends Controller implements Initializable {
                 profilePicCircle.setFill(new ImagePattern(new Image(inputStream)));
             }
         } catch(ResponseNotFoundException e) {
-            //closeScene();
+            e.printStackTrace();
         }
 
         ArrayList<Tweet> tweets = new ArrayList<>();
@@ -103,12 +103,11 @@ public class HomeController extends Controller implements Initializable {
             GetTimelineRes response = (GetTimelineRes) clientThread.getReceiver().getResponse();
             tweets = response.getTweets();
 
-            if(!response.isAccepted())
-            {
-                //closeScene();
+            if(!response.isAccepted()) {
+                System.out.println(response.getMessage());
             }
         } catch (ResponseNotFoundException e) {
-            //closeScene();
+            e.printStackTrace();
         }
 
         for (Tweet tweet : tweets) {
@@ -120,7 +119,6 @@ public class HomeController extends Controller implements Initializable {
 
     @FXML
     void addTweetImageviewPressed(MouseEvent event) {
-        //System.out.println("pressed!");
         changeView("addTweet", event);
     }
 

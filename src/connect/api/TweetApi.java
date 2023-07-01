@@ -28,8 +28,8 @@ public class TweetApi {
                 retweet((RetweetReq) tweetRequest);
                 break;
             case QUOTE:
-            quote((QuoteReq) tweetRequest);
-            break;
+                quote((QuoteReq) tweetRequest);
+                break;
             case REPLY:
                 reply((ReplyReq) tweetRequest);
                 break;

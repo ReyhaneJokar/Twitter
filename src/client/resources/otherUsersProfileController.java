@@ -145,6 +145,10 @@ public class otherUsersProfileController extends Controller implements Initializ
 
                 Response response = clientThread.getReceiver().getResponse();
 
+                if (!response.isAccepted()){
+                    System.out.println(response.getMessage());
+                }
+
                 followUnfollowButton.setText("Followed");
                 followUnfollowButton.setTextFill(Paint.valueOf("white"));
                 followUnfollowButton.setStyle("-fx-background-color:#0da5f3;");
@@ -159,6 +163,10 @@ public class otherUsersProfileController extends Controller implements Initializ
                 clientThread.send(new UnFollowReq(clientThread.getId() , user.getId()));
 
                 Response response = clientThread.getReceiver().getResponse();
+
+                if (!response.isAccepted()){
+                    System.out.println(response.getMessage());
+                }
 
                 followUnfollowButton.setText("Unfollowed");
                 followUnfollowButton.setTextFill(Paint.valueOf("white"));
@@ -208,7 +216,7 @@ public class otherUsersProfileController extends Controller implements Initializ
 
             if(!response.isAccepted())
             {
-                //closeScene();
+                System.out.println(response.getMessage());
             }
 
             idLabel.setText("@" + response.getId());
@@ -258,7 +266,7 @@ public class otherUsersProfileController extends Controller implements Initializ
             }
 
         } catch(ResponseNotFoundException e) {
-            //closeScene();
+            e.printStackTrace();
         }
 
     }

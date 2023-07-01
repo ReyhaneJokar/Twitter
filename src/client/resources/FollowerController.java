@@ -57,12 +57,11 @@ public class FollowerController extends Controller implements Initializable {
             GetFollowersListRes response = (GetFollowersListRes) clientThread.getReceiver().getResponse();
             followers = response.getFollowersList();
 
-            if(!response.isAccepted())
-            {
-                //closeScene();
+            if(!response.isAccepted()) {
+                System.out.println(response.getMessage());
             }
         } catch (ResponseNotFoundException e) {
-            //closeScene();
+            e.printStackTrace();
         }
 
         for (User user : followers) {

@@ -57,12 +57,11 @@ public class FollowingController extends Controller implements Initializable {
             GetFollowingListRes response = (GetFollowingListRes) clientThread.getReceiver().getResponse();
             following = response.getFollowingList();
 
-            if(!response.isAccepted())
-            {
-                //closeScene();
+            if(!response.isAccepted()) {
+                System.out.println(response.getMessage());
             }
         } catch (ResponseNotFoundException e) {
-            //closeScene();
+            e.printStackTrace();
         }
 
         for (User user : following) {

@@ -19,9 +19,6 @@ public class UserApi {
 
 
     protected void getRequest(UserRequest request) throws InvalidTypeException {
-//        System.out.println("You are here :D");
-//        System.out.println(request.getClass().getSimpleName());
-//        System.out.println(request.getSubType().name());
         switch(request.getSubType()) {
             case MY_PROFILE:
                 get_profile((MyProfileReq) request);
