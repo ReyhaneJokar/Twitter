@@ -129,7 +129,7 @@ public class UserApi {
 
     private void show_timeline(TimelineReq request)
     {
-        handleResponse(service.show_timeline(request) , request);
+        sendResponse(service.show_timeline(request));
     }
 
     private void unblock(UnblockReq request)

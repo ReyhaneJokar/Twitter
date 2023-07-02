@@ -225,26 +225,29 @@ public class UserService {
         return new Response(request.getSenderId(), true , "User unfollowed successfully.");
     }
 
-    public Response show_timeline(TimelineReq request)
-    {
+    public Response show_timeline(TimelineReq request) {
+
         ArrayList<Tweet> tweets = new ArrayList<>();
 
-        ArrayList<User> following;
-
-        User senderUser;
+        ArrayList<User> following = new ArrayList<>();
+        User senderUser = null;
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
-            while (true) {
+            boolean flag = false;
+            while (fileInputStream.available() > 0) {
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())) {
                     senderUser = readUser;
                     following = readUser.getFollowing();
-                    break;
+                    flag = true;
                 }
             }
-        } catch (IOException | ClassNotFoundException e) {
-            return new Response(request.getSenderId(), false , e.getMessage());
+            if (!flag){
+                throw new UserNotFoundException();
+            }
+        } catch (IOException | ClassNotFoundException | UserNotFoundException e) {
+            return new GetTimelineRes(request.getSenderId(), false , e.getMessage() , null);
         }
 
 
@@ -261,20 +264,22 @@ public class UserService {
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
-            return new Response(request.getSenderId(), false , e.getMessage());
+            return new GetTimelineRes(request.getSenderId(), false , e.getMessage() , null);
         }
-
 
         for (User user : following) {
             tweets.addAll(user.getTweets());
         }
 
-        for (int i = 0; i < tweets.size()-1; i++) {
-            for (int j = i+1; j < tweets.size(); j++) {
-                if (tweets.get(i).getDate().before(tweets.get(j).getDate())){
-                    Tweet temp = tweets.get(i);
-                    tweets.add(i , tweets.get(j));
-                    tweets.add(j , temp);
+        for (int i = 0; i < tweets.size(); i++) {
+            for (int j = 1; j < (tweets.size()-i); j++) {
+                if (tweets.get(j-1).getDate().before(tweets.get(j).getDate())){
+                    Tweet temp1 = tweets.get(j-1);
+                    Tweet temp2 = tweets.get(j);
+                    tweets.remove(j);
+                    tweets.remove(j-1);
+                    tweets.add(j-1 , temp2);
+                    tweets.add(j ,temp1);
                 }
             }
         }
