@@ -104,9 +104,11 @@ public class otherUsersProfileController extends Controller implements Initializ
 
                 Response response = clientThread.getReceiver().getResponse();
 
-                blockUnblockButton.setText("Blocked");
-                blockUnblockButton.setTextFill(Paint.valueOf("white"));
-                blockUnblockButton.setStyle("-fx-background-color:#0da5f3;");
+                if (response.isAccepted()){
+                    blockUnblockButton.setText("Blocked");
+                    blockUnblockButton.setTextFill(Paint.valueOf("white"));
+                    blockUnblockButton.setStyle("-fx-background-color:#0da5f3;");
+                }
 
             } catch (ResponseNotFoundException e) {
                 e.printStackTrace();
@@ -119,9 +121,11 @@ public class otherUsersProfileController extends Controller implements Initializ
 
                 Response response = clientThread.getReceiver().getResponse();
 
-                blockUnblockButton.setText("Unblocked");
-                blockUnblockButton.setTextFill(Paint.valueOf("white"));
-                blockUnblockButton.setStyle("-fx-background-color:#0da5f3;");
+                if (response.isAccepted()){
+                    blockUnblockButton.setText("Unblocked");
+                    blockUnblockButton.setTextFill(Paint.valueOf("white"));
+                    blockUnblockButton.setStyle("-fx-background-color:#0da5f3;");
+                }
 
             } catch (ResponseNotFoundException e) {
                 e.printStackTrace();

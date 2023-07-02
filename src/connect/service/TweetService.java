@@ -165,7 +165,6 @@ public class TweetService {
     public Response reply(ReplyReq request){
         
         User sender = null;
-        User target = null;
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
@@ -174,15 +173,11 @@ public class TweetService {
                 if (readUser.getId().equals(request.getSenderId())){
                     sender = readUser;
                 }
-                else if(readUser.getId().equals(request.getTargetId())){
-                    target = readUser;
-                }
             }
         } catch (IOException | ClassNotFoundException e) {
             return new Response(request.getSenderId(), false , e.getMessage());
         }
         
-        Tweet targetTweet = new Tweet(request.getText() , request.getImage() , request.getLikes() , request.getRetweets() , request.getDate() , request.getReplies() , target , request.getUuid());
         Tweet replyTweet = new Tweet(request.getReplyText() , null , 0 , 0 , request.getReplyDate() , null , sender , request.getReplyuuid());
 
         ArrayList<User> allUsers = new ArrayList<>();
@@ -194,7 +189,7 @@ public class TweetService {
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getTargetId())){
                     for (int i = 0; i < readUser.getTweets().size(); i++) {
-                        if (readUser.getTweets().get(i).getUuid().equals(targetTweet.getUuid())){
+                        if (readUser.getTweets().get(i).getUuid().equals(request.getUuid())){
                             readUser.getTweets().get(i).getReplies().add(replyTweet);
                             flag = true;
                         }

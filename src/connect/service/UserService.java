@@ -185,33 +185,26 @@ public class UserService {
     public Response unfollow(UnFollowReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
-        User targetUser = null;
-        User actionUser = null;
-
-        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
-            ObjectInputStream in = new ObjectInputStream(fileInputStream)){
-            while (fileInputStream.available() > 0){
-                User readUser = (User) in.readObject();
-                if (readUser.getId().equals(request.getTargetId())){
-                    targetUser = readUser;
-                }
-                else if(readUser.getId().equals(request.getSenderId())){
-                    actionUser = readUser;
-                }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            return new Response(request.getSenderId(), false , e.getMessage());
-        }
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
             while (fileInputStream.available() > 0){
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
-                    readUser.getFollowing().remove(targetUser);
+                    for (int i = 0; i < readUser.getFollowing().size(); i++) {
+                        if (readUser.getFollowing().get(i).getId().equals(request.getTargetId())){
+                            readUser.getFollowing().remove(i);
+                            break;
+                        }
+                    }
                 }
                 else if(readUser.getId().equals(request.getTargetId())){
-                    readUser.getFollowers().remove(actionUser);
+                    for (int i = 0; i < readUser.getFollowers().size(); i++) {
+                        if (readUser.getFollowers().get(i).getId().equals(request.getSenderId())){
+                            readUser.getFollowers().remove(i);
+                            break;
+                        }
+                    }
                 }
                 allUsers.add(readUser);
             }
@@ -238,7 +231,7 @@ public class UserService {
 
         ArrayList<User> following;
 
-        User senderUser = null;
+        User senderUser;
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
@@ -259,7 +252,7 @@ public class UserService {
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
             while (fileInputStream.available() > 0){
                 User readUser = (User) in.readObject();
-                if ((!readUser.getId().equals(request.getSenderId())) && (!senderUser.getBlackList().contains(readUser))){
+                if ((!readUser.getId().equals(request.getSenderId())) && (!senderUser.getBlackList().contains(readUser)) && (!readUser.getBlackList().contains(senderUser))){
                     for (int i = 0; i < readUser.getTweets().size(); i++) {
                         if (readUser.getTweets().get(i).getLikes() >= 10){
                             tweets.add(readUser.getTweets().get(i));
@@ -277,8 +270,8 @@ public class UserService {
         }
 
         for (int i = 0; i < tweets.size()-1; i++) {
-            for (int j = 0; j < tweets.size(); j++) {
-                if (tweets.get(i).getDate().after(tweets.get(j).getDate())){
+            for (int j = i+1; j < tweets.size(); j++) {
+                if (tweets.get(i).getDate().before(tweets.get(j).getDate())){
                     Tweet temp = tweets.get(i);
                     tweets.add(i , tweets.get(j));
                     tweets.add(j , temp);
@@ -293,18 +286,15 @@ public class UserService {
     public Response block_user(BlockReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
-        User targetUser = null;
-        User senderUser = null;
+        User targetUser;
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
-            while (fileInputStream.available() > 0){
+            while (true){
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getTargetId())){
                     targetUser = readUser;
-                }
-                else if (readUser.getId().equals(request.getSenderId())){
-                    senderUser = readUser;
+                    break;
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
@@ -317,12 +307,32 @@ public class UserService {
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
                     readUser.getBlackList().add(targetUser);
-                    readUser.getFollowing().remove(targetUser);
-                    readUser.getFollowers().remove(targetUser);
+                    for (int i = 0; i < readUser.getFollowing().size(); i++) {
+                        if (readUser.getFollowing().get(i).getId().equals(request.getTargetId())){
+                            readUser.getFollowing().remove(i);
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < readUser.getFollowers().size(); i++) {
+                        if (readUser.getFollowers().get(i).getId().equals(request.getTargetId())){
+                            readUser.getFollowers().remove(i);
+                            break;
+                        }
+                    }
                 }
                 else if (readUser.getId().equals(request.getTargetId())){
-                    readUser.getFollowers().remove(senderUser);
-                    readUser.getFollowing().remove(senderUser);
+                    for (int i = 0; i < readUser.getFollowers().size(); i++) {
+                        if (readUser.getFollowers().get(i).getId().equals(request.getSenderId())){
+                            readUser.getFollowers().remove(i);
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < readUser.getFollowing().size(); i++) {
+                        if (readUser.getFollowing().get(i).getId().equals(request.getSenderId())){
+                            readUser.getFollowing().remove(i);
+                            break;
+                        }
+                    }
                 }
                 allUsers.add(readUser);
             }
@@ -346,31 +356,27 @@ public class UserService {
     public Response unblock(UnblockReq request)
     {
         ArrayList<User> allUsers = new ArrayList<>();
-        User targetUser;
 
         try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
             ObjectInputStream in = new ObjectInputStream(fileInputStream)){
-            while (true){
-                User readUser = (User) in.readObject();
-                if (readUser.getId().equals(request.getTargetId())){
-                    targetUser = readUser;
-                    break;
-                }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            return new Response(request.getSenderId(), false , e.getMessage());
-        }
-
-        try(FileInputStream fileInputStream = new FileInputStream(config.getFILE_NAME());
-            ObjectInputStream in = new ObjectInputStream(fileInputStream)){
+            boolean flag = false;
             while (fileInputStream.available() > 0){
                 User readUser = (User) in.readObject();
                 if (readUser.getId().equals(request.getSenderId())){
-                    readUser.getBlackList().remove(targetUser);
+                    for (int i = 0; i < readUser.getBlackList().size(); i++) {
+                        if (readUser.getBlackList().get(i).getId().equals(request.getTargetId())){
+                            readUser.getBlackList().remove(i);
+                            flag = true;
+                            break;
+                        }
+                    }
                 }
                 allUsers.add(readUser);
             }
-        } catch (IOException | ClassNotFoundException e) {
+            if (!flag){
+                throw new UserNotFoundException();
+            }
+        } catch (IOException | ClassNotFoundException | UserNotFoundException e) {
             return new Response(request.getSenderId(), false , e.getMessage());
         }
 

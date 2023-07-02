@@ -110,13 +110,13 @@ public class ReplyCell extends AnchorPane {
         AnchorPane.setLeftAnchor(userNameLabel, 65.0);
 
         AnchorPane.setTopAnchor(userIdLabel, 10.0);
-        AnchorPane.setLeftAnchor(userIdLabel, 110.0);
+        AnchorPane.setLeftAnchor(userIdLabel, 180.0);
 
         AnchorPane.setTopAnchor(textArea, 60.0);
         AnchorPane.setLeftAnchor(textArea, 10.0);
 
         AnchorPane.setTopAnchor(dateLabel, 11.0);
-        AnchorPane.setLeftAnchor(dateLabel, 225.0);
+        AnchorPane.setRightAnchor(dateLabel, 10.0);
 
         AnchorPane.setTopAnchor(userReplyLabel, 39.0);
         AnchorPane.setLeftAnchor(userReplyLabel, 65.0);
