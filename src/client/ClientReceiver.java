@@ -66,30 +66,7 @@ public class ClientReceiver {
         try {
             this.response = response;
         } catch (ClassCastException e) {
-//            try {
-//                receiveMessage((Message) transferable);
-//
-//                Platform.runLater(new Runnable() {
-//
-//                    @Override
-//                    public void run() {
-//
-//                        HomeController controller = getLoader().getController();
-//                        controller.realTimeUpdate((Message) transferable);
-//                    }
-//                });
-
-//            }
-//            catch (ClassCastException ex)
-//            {
-//                throw new InvalidObjectException();
-//            }
-//            catch (IllegalArgumentException | NullPointerException | IllegalStateException ex)
-//            {
-//
-//            }
-
-//        }
+            e.printStackTrace();
         }
     }
 }

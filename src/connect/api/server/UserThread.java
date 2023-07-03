@@ -72,11 +72,6 @@ public class UserThread implements Runnable{
         //setting verified id
         setUserId(id);
 
-        //look for messages of user
-        //receiver.getUnreadMessages(id);
-        /**
-         * inja bayad bere timeline ro neshoon bede
-         */
     }
 
     //when authentication is accepted we should set the user thread id
